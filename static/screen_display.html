@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Presentatiescherm</title>
+  <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/bootstrap.css" />
+</head>
+<body>
+  <div id="display">
+    <div id="intro" class="screen">
+      <img src="/img/logo.png" alt="Logo" />
+      <p>Welkom op de quiz!</p>
+    </div>
+
+    <div id="uitleg" class="screen" style="display:none;">
+      <h2>Spelregels</h2>
+      <p>Luister naar de vraag. Denk na. Stem door een schoen omhoog te steken.</p>
+    </div>
+
+    <div id="vote" class="screen" style="display:none;">
+      <h2 id="vraagtekst"></h2>
+      <p>Het publiek stemt nu...</p>
+    </div>
+
+    <div id="feedback" class="screen" style="display:none;">
+      <p id="feedbackText"></p>
+      <img id="feedbackImage" style="max-height: 60vh;" />
+    </div>
+
+    <div id="scoreboard" class="screen" style="display:none;">
+      <h2>Top 10</h2>
+      <ol id="ranking"></ol>
+    </div>
+  </div>
+
+  <script src="/js/display.js"></script>
+</body>
+</html>

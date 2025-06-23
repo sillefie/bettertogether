@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stemmen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/bootstrap.css" />
+    
+</head>
+<body>
+  <div id="public">
+    <h1>Better Together Quiz</h1>
+
+    <div id="intro" class="screen">
+      <p>Welkom! Wacht op de start van het spel.</p>
+    </div>
+
+    <div id="uitleg" class="screen" style="display:none;">
+      <p>Steek de schoen omhoog van wie volgens jou het antwoord is op de vraag.</p>
+    </div>
+
+    <div id="vote" class="screen" style="display:none;">
+      <p id="questionText"></p>
+      <button onclick="sendVote('persoon1')">Persoon 1</button>
+      <button onclick="sendVote('persoon2')">Persoon 2</button>
+    </div>
+
+    <div id="feedback" class="screen" style="display:none;">
+      <p id="feedbackText"></p>
+      <img id="feedbackImage" style="display:none;" />
+    </div>
+
+    <div id="scoreboard" class="screen" style="display:none;">
+      <h2>Top 10 spelers</h2>
+      <ol id="ranking"></ol>
+    </div>
+  </div>
+
+  <script src="/js/public.js"></script>
+</body>
+</html>
