@@ -9,16 +9,22 @@ socket.onmessage = (event) => {
 
     if (data.type === "question") {
         document.getElementById("question_text").textContent = data.text;
+        showScreen("vote");
     }
 
     if (data.type === "feedback") {
         const feedback = document.getElementById("feedback");
+        const img = document.getElementById("ai_img");
         if (data.result === "correct") {
             feedback.textContent = "✓ Jullie antwoordden hetzelfde!";
             feedback.style.color = "green";
+            img.style.display = "none";
         } else {
-            feedback.innerHTML = `<img src="${data.image}" alt="AI Fout">`;
+            feedback.textContent = "😅 Verschillende antwoorden!";
+            img.src = "/" + data.image;
+            img.style.display = "block";
         }
+        showScreen("feedback");
     }
 
     if (data.type === "scoreboard") {
@@ -29,6 +35,7 @@ socket.onmessage = (event) => {
             li.textContent = `${name}: ${score}`;
             list.appendChild(li);
         });
+        showScreen("scoreboard");
     }
 };
 

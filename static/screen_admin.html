@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Admin</title>
   <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/bootstrap.css" />
 </head>
 <body>
   <div id="admin">
@@ -16,26 +15,96 @@
       <button onclick="setScreen('uitleg')">Spelregels</button>
       <button onclick="setScreen('vote')">Stemmen</button>
       <button onclick="setScreen('feedback')">Feedback</button>
+      <button onclick="setScreen('scoreboard')">Top 10</button>
     </section>
 
     <section>
       <h2>Vraag kiezen</h2>
       <select id="questionSelect"></select>
-      <button onclick="sendQuestion()">Start vraag</button>
+      <button onclick="sendSelectedQuestion()">Start vraag</button>
     </section>
 
     <section>
       <h2>Antwoord check</h2>
-      <button onclick="sendFeedback(true)">Zelfde antwoord</button>
-      <button onclick="sendFeedback(false)">Verschillend antwoord</button>
+      <button onclick="confirmSame()">Zelfde antwoord</button>
+      <button onclick="confirmDifferent()">Verschillend antwoord</button>
     </section>
 
     <section>
       <h2>Quiz afronden</h2>
       <button onclick="endQuiz()">Toon top 10</button>
     </section>
+
+    <section>
+      <h2>Huidige stemmen</h2>
+      <ul id="votes_list"></ul>
+    </section>
   </div>
 
-  <script src="/js/screen_admin.js"></script>
+  <script>
+    const socket = new WebSocket(`wss://${location.host}/ws/admin`);
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "screen") {
+        // eventueel visuele indicator van actief scherm
+      }
+      if (data.type === "votes") {
+        const votes = data.votes;
+        const list = document.getElementById("votes_list");
+        list.innerHTML = "";
+        Object.entries(votes).forEach(([name, answer]) => {
+          const li = document.createElement("li");
+          li.textContent = `${name}: ${answer}`;
+          list.appendChild(li);
+        });
+      }
+    };
+
+    function setScreen(screenName) {
+      socket.send(JSON.stringify({ command: "set_screen", screen: screenName }));
+    }
+
+    function sendSelectedQuestion() {
+      const select = document.getElementById("questionSelect");
+      const index = select.selectedIndex;
+      socket.send(JSON.stringify({ command: "set_question", idx: index }));
+    }
+
+    function confirmSame() {
+      socket.send(JSON.stringify({ command: "same_answer" }));
+    }
+
+    function confirmDifferent() {
+      socket.send(JSON.stringify({ command: "different_answer" }));
+    }
+
+    function endQuiz() {
+      socket.send(JSON.stringify({ command: "end_quiz" }));
+    }
+
+    window.onload = () => {
+      const select = document.getElementById("questionSelect");
+      const vragen = [
+        "Wie heeft de gekste familie?",
+        "Wie zou er het best voor een zwijn kunnen zorgen?",
+        "Wie heeft er als eerste ‘ik zie je graag’ gezegd?",
+        "Wie geeft er het meeste geld uit?",
+        "Wie is de meeste creatieve?",
+        "Wie zou het snelst uit zijn comfort zone gaan om de ander te verrassen?",
+        "Wie heeft als eerste voorgesteld om seks te hebben op een openbare plaats?",
+        "Van wie hebben de kinderen de meeste eigenschappen?",
+        "Wie heeft de ander verleid?",
+        "Wie doet er het meest aan ‘dirty talk’ in de slaapkamer?",
+        "Wie van de twee lijkt het meest op zijn/haar respectievelijke vader/moeder?",
+        "Wie doet de ander het meeste lachen?"
+      ];
+      vragen.forEach((v, i) => {
+        const opt = document.createElement("option");
+        opt.textContent = v;
+        select.appendChild(opt);
+      });
+    };
+  </script>
 </body>
 </html>
