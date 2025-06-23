@@ -114,8 +114,17 @@ async def websocket_admin(ws: WebSocket):
                         "text": questions[idx]
                     })
                     await broadcast(admin_clients, {"type": "votes", "votes": state["votes"]})
+            
             elif cmd == "same_answer":
-                await broadcast(public_clients.values(), {"type": "feedback", "result": "correct"})
+                counts = {"Stefanie": 0, "Mathieu": 0}
+                for vote in state["votes"].values():
+                    if vote in counts:
+                        counts[vote] += 1
+                await broadcast(public_clients.values(), {
+                    "type": "feedback",
+                    "result": "correct",
+                    "votes": counts
+                })
             elif cmd == "different_answer":
                 available = [f"img/ai{i}.jpg" for i in range(1, 6) if f"img/ai{i}.jpg" not in state["used_ai"]]
                 if not available:
@@ -124,8 +133,17 @@ async def websocket_admin(ws: WebSocket):
                 chosen = random.choice(available)
                 state["used_ai"].append(chosen)
                 save_state(state)
-                await broadcast(public_clients.values(), {"type": "feedback", "result": "wrong", "image": chosen})
-            elif cmd == "end_quiz":
+                counts = {"Stefanie": 0, "Mathieu": 0}
+                for vote in state["votes"].values():
+                    if vote in counts:
+                        counts[vote] += 1
+                await broadcast(public_clients.values(), {
+                    "type": "feedback",
+                    "result": "wrong",
+                    "image": chosen,
+                    "votes": counts
+                })
+elif cmd == "end_quiz":
                 counts = {}
                 for name in state["votes"]:
                     vote = state["votes"][name]
