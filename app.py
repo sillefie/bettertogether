@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from starlette.middleware.cors import CORSMiddleware
-import random
+from fastapi.middleware.cors import CORSMiddleware
+import json
+import os
 
 app = FastAPI()
 
@@ -16,79 +16,61 @@ app.add_middleware(
 )
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="static")
 
 state = {
     "current_screen": "start",
-    "votes": [],
-    "history": [],
-    "ai_images": ["ai1.jpg", "ai2.jpg", "ai4.jpg"],
+    "votes": {},
+    "result": {},
+    "couple_result": {},
+    "names": ["Stefanie", "Mathieu"]
 }
 
-@app.get("/", response_class=HTMLResponse)
-async def get_public(request: Request):
-    return templates.TemplateResponse("screen_public.html", {"request": request})
+@app.get("/admin")
+async def admin():
+    return HTMLResponse(open("static/screen_admin.html").read())
 
-@app.get("/admin", response_class=HTMLResponse)
-async def get_admin(request: Request):
-    return templates.TemplateResponse("screen_admin.html", {"request": request})
+@app.get("/public")
+async def public():
+    return HTMLResponse(open("static/screen_public.html").read())
 
-@app.get("/display", response_class=HTMLResponse)
-async def get_display(request: Request):
-    return templates.TemplateResponse("screen_display.html", {"request": request})
+@app.get("/display")
+async def display():
+    return HTMLResponse(open("static/screen_display.html").read())
 
-@app.post("/vote")
-async def vote(answer: str = Form(...)):
-    state["votes"].append(answer)
-    return {"status": "ok"}
+@app.get("/state")
+async def get_state():
+    return JSONResponse(state)
 
-@app.get("/results")
-async def results():
-    stefanie = sum(1 for v in state["votes"] if v == "Stefanie")
-    mathieu = sum(1 for v in state["votes"] if v == "Mathieu")
-    return {"stefanie": stefanie, "mathieu": mathieu}
+@app.post("/command")
+async def post_command(request: Request):
+    try:
+        data = await request.json()
+        cmd = data.get("cmd")
 
-@app.post("/admin/cmd")
-async def admin_cmd(cmd: str = Form(...)):
-    if cmd == "reset_votes":
-        state["votes"] = []
-    elif cmd == "next_screen":
-        state["current_screen"] = "intro"
-    elif cmd == "to_rules":
-        state["current_screen"] = "rules"
-    elif cmd == "to_qr":
-        state["current_screen"] = "qr"
-    elif cmd.startswith("question:"):
-        state["current_screen"] = cmd
-        state["votes"] = []
-    elif cmd == "back_to_start":
-        state["current_screen"] = "start"
-    elif cmd == "show_results":
-        state["history"].append(state["votes"][:])
-    elif cmd == "end_quiz":
-        state["current_screen"] = "end"
-    return {"status": "ok"}
+        if cmd == "set_screen":
+            state["current_screen"] = data.get("screen", "start")
+        elif cmd == "reset_votes":
+            state["votes"] = {}
+        elif cmd == "reset_result":
+            state["result"] = {}
+        elif cmd == "reset_all":
+            state["votes"] = {}
+            state["result"] = {}
+            state["couple_result"] = {}
+            state["current_screen"] = "start"
+        elif cmd == "set_result":
+            state["result"] = data.get("result", {})
+        elif cmd == "set_couple_result":
+            state["couple_result"] = data.get("couple_result", {})
+        elif cmd == "vote":
+            player = data.get("player")
+            answer = data.get("answer")
+            if player:
+                state["votes"][player] = answer
+        else:
+            return JSONResponse({"error": "Unknown command"}, status_code=400)
 
-@app.get("/admin/screen")
-async def get_admin_screen():
-    return {"screen": state["current_screen"]}
+        return JSONResponse({"status": "ok"})
 
-@app.get("/public/screen")
-async def get_public_screen():
-    return {"screen": state["current_screen"]}
-
-@app.get("/public/waiting")
-async def get_waiting():
-    return {"status": "waiting"}
-
-@app.get("/admin/votes")
-async def get_vote_counts():
-    stefanie = sum(1 for v in state["votes"] if v == "Stefanie")
-    mathieu = sum(1 for v in state["votes"] if v == "Mathieu")
-    return {"stefanie": stefanie, "mathieu": mathieu, "total": len(state["votes"])}
-
-@app.get("/admin/aiimage")
-async def get_ai_image():
-    if not state["ai_images"]:
-        return {"image": None}
-    return {"image": state["ai_images"].pop(0)}
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=500)
