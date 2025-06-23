@@ -6,14 +6,19 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div id="screen_intro" class="screen">
-    <h1>Welkom bij de trouwquiz</h1>
+  <div id="screen_start" class="screen">
+    <h1>Welkom bij BetterTogether Quiz</h1>
     <p>We starten zo meteen...</p>
+  </div>
+
+  <div id="screen_intro" class="screen" style="display:none">
+    <h1>Intro</h1>
+    <p>Bruidspaar komt naar voren.</p>
   </div>
 
   <div id="screen_uitleg" class="screen" style="display:none">
     <h2>Spelregels</h2>
-    <p>Luister goed naar de uitleg!</p>
+    <p>Luister naar de uitlegstem.</p>
   </div>
 
   <div id="screen_vote" class="screen" style="display:none">
@@ -22,8 +27,10 @@
   </div>
 
   <div id="screen_feedback" class="screen" style="display:none">
-    <h2 id="feedback">Antwoord komt hier</h2>
+    <h2 id="feedback">Antwoord</h2>
     <img id="ai_img" style="max-width:400px;display:none">
+    <h3>Stemmen</h3>
+    <ul id="live_votes"></ul>
   </div>
 
   <div id="screen_scoreboard" class="screen" style="display:none">

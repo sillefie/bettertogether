@@ -15,6 +15,8 @@ socket.onmessage = (event) => {
     if (data.type === "feedback") {
         const feedback = document.getElementById("feedback");
         const img = document.getElementById("ai_img");
+        const voteList = document.getElementById("live_votes");
+
         if (data.result === "correct") {
             feedback.textContent = "✓ Jullie antwoordden hetzelfde!";
             feedback.style.color = "green";
@@ -24,6 +26,16 @@ socket.onmessage = (event) => {
             img.src = "/" + data.image;
             img.style.display = "block";
         }
+
+        voteList.innerHTML = "";
+        if (data.votes) {
+            Object.entries(data.votes).forEach(([name, vote]) => {
+                const li = document.createElement("li");
+                li.textContent = `${name}: ${vote}`;
+                voteList.appendChild(li);
+            });
+        }
+
         showScreen("feedback");
     }
 
