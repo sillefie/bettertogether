@@ -13,41 +13,34 @@ socket.onmessage = (event) => {
     }
 
     if (data.type === "feedback") {
-        const feedback = document.getElementById("feedback");
+        const title = document.getElementById("result_title");
+        const content = document.getElementById("result_content");
         const img = document.getElementById("ai_img");
-        const voteList = document.getElementById("live_votes");
+        const voteList = document.getElementById("vote_counts");
+
+        title.textContent = "Resultaat van Stefanie & Mathieu";
+        voteList.innerHTML = "";
+        content.innerHTML = "";
 
         if (data.result === "correct") {
-            feedback.textContent = "✓ Jullie antwoordden hetzelfde!";
-            feedback.style.color = "green";
+            content.innerHTML = "✓ Jullie antwoordden hetzelfde!";
+            content.style.color = "green";
             img.style.display = "none";
         } else {
-            feedback.textContent = "😅 Verschillende antwoorden!";
+            content.innerHTML = "😅 Verschillende antwoorden!";
             img.src = "/" + data.image;
             img.style.display = "block";
         }
 
-        voteList.innerHTML = "";
         if (data.votes) {
-            Object.entries(data.votes).forEach(([name, vote]) => {
+            for (const [person, count] of Object.entries(data.votes)) {
                 const li = document.createElement("li");
-                li.textContent = `${name}: ${vote}`;
+                li.textContent = `${person}: ${count}`;
                 voteList.appendChild(li);
-            });
+            }
         }
 
         showScreen("feedback");
-    }
-
-    if (data.type === "scoreboard") {
-        const list = document.getElementById("ranking");
-        list.innerHTML = "";
-        data.ranking.forEach(([name, score]) => {
-            const li = document.createElement("li");
-            li.textContent = `${name}: ${score}`;
-            list.appendChild(li);
-        });
-        showScreen("scoreboard");
     }
 };
 

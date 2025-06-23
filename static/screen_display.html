@@ -4,8 +4,14 @@
   <meta charset="UTF-8">
   <title>Display</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="https://www.wearebettertogether.be/wp-content/themes/kalium/style.css">
 </head>
 <body>
+  <header>
+    <img src="https://www.wearebettertogether.be/wp-content/uploads/2021/02/Logo_BETTERTOGETHER_WHITE.svg" alt="BetterTogether logo" style="max-width:200px">
+  </header>
+
   <div id="screen_start" class="screen">
     <h1>Welkom bij BetterTogether Quiz</h1>
     <p>We starten zo meteen...</p>
@@ -27,15 +33,11 @@
   </div>
 
   <div id="screen_feedback" class="screen" style="display:none">
-    <h2 id="feedback">Antwoord</h2>
-    <img id="ai_img" style="max-width:400px;display:none">
-    <h3>Stemmen</h3>
-    <ul id="live_votes"></ul>
-  </div>
-
-  <div id="screen_scoreboard" class="screen" style="display:none">
-    <h2>Top 10</h2>
-    <ol id="ranking"></ol>
+    <h2 id="result_title">Resultaat van Stefanie & Mathieu</h2>
+    <div id="result_content"></div>
+    <img id="ai_img" style="max-width:400px;display:none"><br><br>
+    <h3>Stemverdeling</h3>
+    <ul id="vote_counts"></ul>
   </div>
 
   <script src="/js/screen_display.js"></script>
