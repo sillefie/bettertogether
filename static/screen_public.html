@@ -1,41 +1,30 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Stemmen</title>
-  <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/bootstrap.css" />
-    
+  <meta charset="UTF-8">
+  <title>BetterTogether - Publiek</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div id="public">
-    <h1>Better Together Quiz</h1>
-
-    <div id="intro" class="screen">
-      <p>Welkom! Wacht op de start van het spel.</p>
-    </div>
-
-    <div id="uitleg" class="screen" style="display:none;">
-      <p>Steek de schoen omhoog van wie volgens jou het antwoord is op de vraag.</p>
-    </div>
-
-    <div id="vote" class="screen" style="display:none;">
-      <p id="questionText"></p>
-      <button onclick="sendVote('persoon1')">Persoon 1</button>
-      <button onclick="sendVote('persoon2')">Persoon 2</button>
-    </div>
-
-    <div id="feedback" class="screen" style="display:none;">
-      <p id="feedbackText"></p>
-      <img id="feedbackImage" style="display:none;" />
-    </div>
-
-    <div id="scoreboard" class="screen" style="display:none;">
-      <h2>Top 10 spelers</h2>
-      <ol id="ranking"></ol>
-    </div>
+  <div id="intro">
+    <h1>Welkom!</h1>
+    <p>We starten zo meteen.</p>
+    <input id="nameInput" placeholder="Jouw naam">
+    <button onclick="register()">Start</button>
   </div>
-
-  <script src="/js/public.js"></script>
+  <div id="question" style="display:none">
+    <h2 id="questionText"></h2>
+    <button onclick="vote('bruid')">👰 Bruid</button>
+    <button onclick="vote('bruidegom')">🤵 Bruidegom</button>
+  </div>
+  <div id="feedback" style="display:none">
+    <h2 id="feedbackText"></h2>
+    <img id="aiImage" style="max-width:300px;display:none">
+  </div>
+  <div id="scoreboard" style="display:none">
+    <h2>Top 10</h2>
+    <ol id="rankingList"></ol>
+  </div>
+  <script src="/js/screen_public.js"></script>
 </body>
 </html>
