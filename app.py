@@ -1,10 +1,10 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from starlette.middleware.cors import CORSMiddleware
-import random
-import uuid
-from state import load_state, save_state
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import os
+import json
 
 app = FastAPI()
 
@@ -12,143 +12,95 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
-app.mount("/audio", StaticFiles(directory="static/audio"), name="audio")
-app.mount("/css", StaticFiles(directory="static/css"), name="css")
-app.mount("/img", StaticFiles(directory="static/img"), name="img")
-app.mount("/js", StaticFiles(directory="static/js"), name="js")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.get("/")
-async def get_public():
-    return FileResponse("static/screen_public.html")
+STATE_FILE = "state.json"
 
-@app.get("/admin")
-async def get_admin():
-    return FileResponse("static/screen_admin.html")
+def load_state():
+    if not os.path.exists(STATE_FILE):
+        with open(STATE_FILE, "w") as f:
+            json.dump({
+                "current_screen": "start",
+                "question_index": 0,
+                "results": [],
+                "votes": [],
+                "names": {},
+            }, f)
+    with open(STATE_FILE, "r") as f:
+        return json.load(f)
 
-@app.get("/display")
+def save_state(state):
+    with open(STATE_FILE, "w") as f:
+        json.dump(state, f)
+
+@app.get("/", response_class=HTMLResponse)
+async def get_root():
+    return FileResponse("static/public.html")
+
+@app.get("/display", response_class=HTMLResponse)
 async def get_display():
-    return FileResponse("static/screen_display.html")
+    return FileResponse("static/display.html")
 
-questions = [
-    "Wie heeft de gekste familie?",
-    "Wie zou er het best voor een zwijn kunnen zorgen?",
-    "Wie heeft er als eerste ‘ik zie je graag’ gezegd?",
-    "Wie geeft er het meeste geld uit?",
-    "Wie is de meeste creatieve?",
-    "Wie zou het snelst uit zijn comfort zone gaan om de ander te verrassen?",
-    "Wie heeft als eerste voorgesteld om seks te hebben op een openbare plaats?",
-    "Van wie hebben de kinderen de meeste eigenschappen?",
-    "Wie heeft de ander verleid?",
-    "Wie doet er het meest aan ‘dirty talk’ in de slaapkamer?",
-    "Wie van de twee lijkt het meest op zijn/haar respectievelijke vader/moeder?",
-    "Wie doet de ander het meeste lachen?"
-]
+@app.get("/admin", response_class=HTMLResponse)
+async def get_admin():
+    return FileResponse("static/admin.html")
 
-state = load_state()
+@app.get("/state")
+async def get_state():
+    return load_state()
 
-def reset_votes():
-    state["votes"] = {}
+class NameData(BaseModel):
+    id: str
+    name: str
+
+@app.post("/name")
+async def post_name(data: NameData):
+    state = load_state()
+    state["names"][data.id] = data.name
     save_state(state)
+    return {"status": "ok"}
 
-public_clients = {}
-admin_clients = []
+class VoteData(BaseModel):
+    id: str
+    vote: str
 
-async def broadcast(targets, message):
-    for ws in targets:
-        try:
-            await ws.send_json(message)
-        except:
-            pass
+@app.post("/vote")
+async def post_vote(data: VoteData):
+    state = load_state()
+    existing_vote = next((v for v in state["votes"] if v["id"] == data.id and v["question"] == state["question_index"]), None)
+    if not existing_vote:
+        state["votes"].append({
+            "id": data.id,
+            "vote": data.vote,
+            "question": state["question_index"]
+        })
+    save_state(state)
+    return {"status": "ok"}
 
-@app.websocket("/ws/public")
-async def websocket_public(ws: WebSocket):
-    await ws.accept()
-    uid = str(uuid.uuid4())
-    public_clients[uid] = ws
-    await ws.send_json({"type": "screen", "screen": state["screen"]})
-    try:
-        while True:
-            data = await ws.receive_json()
-            if data.get("type") == "register":
-                name = data["name"].strip()
-                if name:
-                    state["players"][uid] = name
-                    save_state(state)
-            elif data.get("vote"):
-                vote = data["vote"]
-                name = state["players"].get(uid, f"anon{len(state['players'])}")
-                if name not in state["votes"]:
-                    state["votes"][name] = vote
-                    save_state(state)
-                    await broadcast(admin_clients, {"type": "votes", "votes": state["votes"]})
-    except WebSocketDisconnect:
-        public_clients.pop(uid, None)
-        state["players"].pop(uid, None)
-        save_state(state)
+class AdminCommand(BaseModel):
+    cmd: str
+    value: str = ""
 
-@app.websocket("/ws/admin")
-async def websocket_admin(ws: WebSocket):
-    await ws.accept()
-    admin_clients.append(ws)
-    await ws.send_json({"type": "screen", "screen": state["screen"]})
-    try:
-        while True:
-            data = await ws.receive_json()
-            cmd = data.get("command")
-            if cmd == "set_screen":
-                state["screen"] = data["screen"]
-                save_state(state)
-                await broadcast(public_clients.values(), {"type": "screen", "screen": state["screen"]})
-            elif cmd == "set_question":
-                idx = int(data["idx"])
-                if 0 <= idx < len(questions):
-                    state["question_idx"] = idx
-                    reset_votes()
-                    save_state(state)
-                    await broadcast(public_clients.values(), {
-                        "type": "question",
-                        "idx": idx,
-                        "text": questions[idx]
-                    })
-                    await broadcast(admin_clients, {"type": "votes", "votes": state["votes"]})
-            
-            elif cmd == "same_answer":
-                counts = {"Stefanie": 0, "Mathieu": 0}
-                for vote in state["votes"].values():
-                    if vote in counts:
-                        counts[vote] += 1
-                await broadcast(public_clients.values(), {
-                    "type": "feedback",
-                    "result": "correct",
-                    "votes": counts
-                })
-            elif cmd == "different_answer":
-                available = [f"img/ai{i}.jpg" for i in range(1, 6) if f"img/ai{i}.jpg" not in state["used_ai"]]
-                if not available:
-                    available = [f"img/ai{i}.jpg" for i in range(1, 6)]
-                    state["used_ai"] = []
-                chosen = random.choice(available)
-                state["used_ai"].append(chosen)
-                save_state(state)
-                counts = {"Stefanie": 0, "Mathieu": 0}
-                for vote in state["votes"].values():
-                    if vote in counts:
-                        counts[vote] += 1
-                await broadcast(public_clients.values(), {
-                    "type": "feedback",
-                    "result": "wrong",
-                    "image": chosen,
-                    "votes": counts
-                })
-elif cmd == "end_quiz":
-                counts = {}
-                for name in state["votes"]:
-                    vote = state["votes"][name]
-                    counts[vote] = counts.get(vote, 0) + 1
-                top10 = sorted(counts.items(), key=lambda x: x[1], reverse=True)[:10]
-                await broadcast(public_clients.values(), {"type": "scoreboard", "ranking": top10})
-    except WebSocketDisconnect:
-        admin_clients.remove(ws)
+@app.post("/admin")
+async def post_admin(data: AdminCommand):
+    state = load_state()
+
+    if data.cmd == "set_screen":
+        state["current_screen"] = data.value
+    elif data.cmd == "next_question":
+        state["question_index"] += 1
+    elif data.cmd == "record_result":
+        state["results"].append(data.value)
+    elif data.cmd == "reset":
+        state = {
+            "current_screen": "start",
+            "question_index": 0,
+            "results": [],
+            "votes": [],
+            "names": {},
+        }
+    save_state(state)
+    return {"status": "ok"}
