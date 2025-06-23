@@ -12,19 +12,28 @@
     <input id="nameInput" placeholder="Jouw naam">
     <button onclick="register()">Start</button>
   </div>
+
   <div id="question" style="display:none">
     <h2 id="questionText"></h2>
     <button onclick="vote('bruid')">👰 Bruid</button>
     <button onclick="vote('bruidegom')">🤵 Bruidegom</button>
   </div>
+
+  <div id="waiting" style="display:none">
+    <h2>Bedankt om te stemmen!</h2>
+    <p>Wacht op het resultaat...</p>
+  </div>
+
   <div id="feedback" style="display:none">
     <h2 id="feedbackText"></h2>
     <img id="aiImage" style="max-width:300px;display:none">
   </div>
+
   <div id="scoreboard" style="display:none">
     <h2>Top 10</h2>
     <ol id="rankingList"></ol>
   </div>
+
   <script src="/js/screen_public.js"></script>
 </body>
 </html>

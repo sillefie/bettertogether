@@ -11,6 +11,8 @@ function register() {
 
 function vote(v) {
   ws.send(JSON.stringify({ vote: v }));
+  document.getElementById("question").style.display = "none";
+  document.getElementById("waiting").style.display = "";
 }
 
 ws.onmessage = (event) => {
@@ -18,6 +20,7 @@ ws.onmessage = (event) => {
   if (msg.type === "screen") {
     if (msg.screen === "question") {
       document.getElementById("question").style.display = "";
+      document.getElementById("waiting").style.display = "none";
       document.getElementById("feedback").style.display = "none";
       document.getElementById("scoreboard").style.display = "none";
     } else {
@@ -26,10 +29,12 @@ ws.onmessage = (event) => {
   } else if (msg.type === "question") {
     document.getElementById("questionText").innerText = msg.text;
     document.getElementById("question").style.display = "";
+    document.getElementById("waiting").style.display = "none";
     document.getElementById("feedback").style.display = "none";
     document.getElementById("scoreboard").style.display = "none";
   } else if (msg.type === "feedback") {
     document.getElementById("question").style.display = "none";
+    document.getElementById("waiting").style.display = "none";
     document.getElementById("feedback").style.display = "";
     if (msg.result === "correct") {
       document.getElementById("feedbackText").innerText = "🎉 Jullie antwoorden kwamen overeen!";
@@ -41,6 +46,7 @@ ws.onmessage = (event) => {
     }
   } else if (msg.type === "scoreboard") {
     document.getElementById("feedback").style.display = "none";
+    document.getElementById("waiting").style.display = "none";
     document.getElementById("scoreboard").style.display = "";
     const list = document.getElementById("rankingList");
     list.innerHTML = "";
