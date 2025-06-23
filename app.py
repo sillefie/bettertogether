@@ -1,106 +1,94 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import os
-import json
+from fastapi.templating import Jinja2Templates
+from starlette.middleware.cors import CORSMiddleware
+import random
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="static")
 
-STATE_FILE = "state.json"
-
-def load_state():
-    if not os.path.exists(STATE_FILE):
-        with open(STATE_FILE, "w") as f:
-            json.dump({
-                "current_screen": "start",
-                "question_index": 0,
-                "results": [],
-                "votes": [],
-                "names": {},
-            }, f)
-    with open(STATE_FILE, "r") as f:
-        return json.load(f)
-
-def save_state(state):
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f)
+state = {
+    "current_screen": "start",
+    "votes": [],
+    "history": [],
+    "ai_images": ["ai1.jpg", "ai2.jpg", "ai4.jpg"],
+}
 
 @app.get("/", response_class=HTMLResponse)
-async def get_root():
-    return FileResponse("static/public.html")
-
-@app.get("/display", response_class=HTMLResponse)
-async def get_display():
-    return FileResponse("static/display.html")
+async def get_public(request: Request):
+    return templates.TemplateResponse("screen_public.html", {"request": request})
 
 @app.get("/admin", response_class=HTMLResponse)
-async def get_admin():
-    return FileResponse("static/admin.html")
+async def get_admin(request: Request):
+    return templates.TemplateResponse("screen_admin.html", {"request": request})
 
-@app.get("/state")
-async def get_state():
-    return load_state()
-
-class NameData(BaseModel):
-    id: str
-    name: str
-
-@app.post("/name")
-async def post_name(data: NameData):
-    state = load_state()
-    state["names"][data.id] = data.name
-    save_state(state)
-    return {"status": "ok"}
-
-class VoteData(BaseModel):
-    id: str
-    vote: str
+@app.get("/display", response_class=HTMLResponse)
+async def get_display(request: Request):
+    return templates.TemplateResponse("screen_display.html", {"request": request})
 
 @app.post("/vote")
-async def post_vote(data: VoteData):
-    state = load_state()
-    existing_vote = next((v for v in state["votes"] if v["id"] == data.id and v["question"] == state["question_index"]), None)
-    if not existing_vote:
-        state["votes"].append({
-            "id": data.id,
-            "vote": data.vote,
-            "question": state["question_index"]
-        })
-    save_state(state)
+async def vote(answer: str = Form(...)):
+    state["votes"].append(answer)
     return {"status": "ok"}
 
-class AdminCommand(BaseModel):
-    cmd: str
-    value: str = ""
+@app.get("/results")
+async def results():
+    stefanie = sum(1 for v in state["votes"] if v == "Stefanie")
+    mathieu = sum(1 for v in state["votes"] if v == "Mathieu")
+    return {"stefanie": stefanie, "mathieu": mathieu}
 
-@app.post("/admin")
-async def post_admin(data: AdminCommand):
-    state = load_state()
-
-    if data.cmd == "set_screen":
-        state["current_screen"] = data.value
-    elif data.cmd == "next_question":
-        state["question_index"] += 1
-    elif data.cmd == "record_result":
-        state["results"].append(data.value)
-    elif data.cmd == "reset":
-        state = {
-            "current_screen": "start",
-            "question_index": 0,
-            "results": [],
-            "votes": [],
-            "names": {},
-        }
-    save_state(state)
+@app.post("/admin/cmd")
+async def admin_cmd(cmd: str = Form(...)):
+    if cmd == "reset_votes":
+        state["votes"] = []
+    elif cmd == "next_screen":
+        state["current_screen"] = "intro"
+    elif cmd == "to_rules":
+        state["current_screen"] = "rules"
+    elif cmd == "to_qr":
+        state["current_screen"] = "qr"
+    elif cmd.startswith("question:"):
+        state["current_screen"] = cmd
+        state["votes"] = []
+    elif cmd == "back_to_start":
+        state["current_screen"] = "start"
+    elif cmd == "show_results":
+        state["history"].append(state["votes"][:])
+    elif cmd == "end_quiz":
+        state["current_screen"] = "end"
     return {"status": "ok"}
+
+@app.get("/admin/screen")
+async def get_admin_screen():
+    return {"screen": state["current_screen"]}
+
+@app.get("/public/screen")
+async def get_public_screen():
+    return {"screen": state["current_screen"]}
+
+@app.get("/public/waiting")
+async def get_waiting():
+    return {"status": "waiting"}
+
+@app.get("/admin/votes")
+async def get_vote_counts():
+    stefanie = sum(1 for v in state["votes"] if v == "Stefanie")
+    mathieu = sum(1 for v in state["votes"] if v == "Mathieu")
+    return {"stefanie": stefanie, "mathieu": mathieu, "total": len(state["votes"])}
+
+@app.get("/admin/aiimage")
+async def get_ai_image():
+    if not state["ai_images"]:
+        return {"image": None}
+    return {"image": state["ai_images"].pop(0)}
