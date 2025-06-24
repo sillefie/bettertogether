@@ -89,6 +89,15 @@ async def websocket_public(ws: WebSocket):
         state["players"].pop(uid, None)
         save_state(state)
 
+
+
+@app.post("/screen/qr")
+async def set_screen_qr():
+    state = load_state()
+    state["screen"] = "qr"
+    save_state(state)
+    return {"status": "ok", "screen": "qr"}
+
 @app.websocket("/ws/admin")
 async def websocket_admin(ws: WebSocket):
     await ws.accept()
