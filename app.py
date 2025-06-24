@@ -116,6 +116,35 @@ async def websocket_admin(ws: WebSocket):
                     await broadcast(admin_clients, {"type": "votes", "votes": state["votes"]})
             elif cmd == "same_answer":
                 await broadcast(public_clients.values(), {"type": "feedback", "result": "correct"})
+elif msg["command"] in ["same_answer_stefanie", "same_answer_mathieu"]:
+    winning_name = "Stefanie" if msg["command"] == "same_answer_stefanie" else "Mathieu"
+
+    votes = state.votes
+    votes_stefanie = sum(1 for v in votes.values() if v == "Stefanie")
+    votes_mathieu = sum(1 for v in votes.values() if v == "Mathieu")
+    total_votes = len(votes)
+
+    # Bereken hoe hard publiek verschilt
+    diff_votes = abs(votes_stefanie - votes_mathieu)
+    diff_percentage = (diff_votes / total_votes) * 100 if total_votes > 0 else 0
+
+    # Werd er door meerderheid van publiek hetzelfde gestemd als koppel?
+    publiek_zelfde = (
+        (votes_stefanie > votes_mathieu and winning_name == "Stefanie") or
+        (votes_mathieu > votes_stefanie and winning_name == "Mathieu")
+    )
+
+    await state.send_to_all({
+        "type": "feedback",
+        "result": "same",
+        "winning_name": winning_name,
+        "votes_stefanie": votes_stefanie,
+        "votes_mathieu": votes_mathieu,
+        "votes_total": total_votes,
+        "diff_public_vs_couple": diff_percentage,
+        "public_agreement": publiek_zelfde,
+        "votes": votes,
+    })
             elif cmd == "different_answer":
                 available = [f"img/ai{i}.jpg" for i in range(1, 6) if f"img/ai{i}.jpg" not in state["used_ai"]]
                 if not available:

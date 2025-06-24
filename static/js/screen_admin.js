@@ -27,8 +27,15 @@ function sendQuestion(index) {
     socket.send(JSON.stringify({ command: "set_question", idx: index }));
 }
 
-function confirmSame() {
+/* function confirmSame() {
     socket.send(JSON.stringify({ command: "same_answer" }));
+}*/
+function confirmSameStefanie() {
+  socket.send(JSON.stringify({ command: "same_answer_stefanie" }));
+}
+
+function confirmSameMathieu() {
+  socket.send(JSON.stringify({ command: "same_answer_mathieu" }));
 }
 
 function confirmDifferent() {
