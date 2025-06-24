@@ -1,16 +1,18 @@
-const socket = new WebSocket(`ws://${location.host}/ws/public`);
 
-const questionText = document.getElementById("question-text");
-const timerEl = document.getElementById("timer");
-const voteFeedback = document.getElementById("vote-feedback");
+const socket = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/public`);
+
 const nameInput = document.getElementById("name-input");
 const startButton = document.getElementById("start-button");
+const welcomeText = document.getElementById("welcome-text");
 const voteButtons = document.getElementById("vote-buttons");
 const stefanieBtn = document.getElementById("vote-stefanie");
 const mathieuBtn = document.getElementById("vote-mathieu");
+const questionText = document.getElementById("question-text");
+const feedbackEl = document.getElementById("vote-feedback");
+const timerEl = document.getElementById("timer");
 
 let name = "";
-let currentScreen = "";
+let currentQuestion = "";
 
 function showTimer(seconds) {
   let remaining = seconds;
@@ -21,77 +23,88 @@ function showTimer(seconds) {
     if (remaining <= 0) {
       clearInterval(interval);
       timerEl.style.display = "none";
+      voteButtons.style.display = "none";
     } else {
       timerEl.textContent = `${remaining}s`;
     }
   }, 1000);
 }
 
-socket.addEventListener("open", () => {
-  console.log("Verbonden met server");
+startButton.addEventListener("click", () => {
+  name = nameInput.value.trim();
+  if (name) {
+    nameInput.style.display = "none";
+    startButton.style.display = "none";
+    welcomeText.textContent = "Welkom! We starten zo meteen.";
+  }
+});
+
+stefanieBtn.addEventListener("click", () => {
+  if (!name) return;
+  socket.send(JSON.stringify({ type: "vote", name: name, vote: "Stefanie" }));
+  voteButtons.style.display = "none";
+  feedbackEl.textContent = "Wacht op resultaten...";
+});
+
+mathieuBtn.addEventListener("click", () => {
+  if (!name) return;
+  socket.send(JSON.stringify({ type: "vote", name: name, vote: "Mathieu" }));
+  voteButtons.style.display = "none";
+  feedbackEl.textContent = "Wacht op resultaten...";
 });
 
 socket.addEventListener("message", (event) => {
   const msg = JSON.parse(event.data);
 
-  if (msg.type === "screen") {
-    currentScreen = msg.screen;
-    updateScreen(msg.screen);
+  if (msg.type === "set_screen") {
+    feedbackEl.textContent = "";
+    questionText.textContent = "";
+    voteButtons.style.display = "none";
+    timerEl.style.display = "none";
+    if (msg.screen === "start" || msg.screen === "intro" || msg.screen === "rules" || msg.screen === "qr") {
+      welcomeText.textContent = "Welkom! We starten zo meteen.";
+      if (name) {
+        nameInput.style.display = "none";
+        startButton.style.display = "none";
+      } else {
+        nameInput.style.display = "inline-block";
+        startButton.style.display = "inline-block";
+      }
+    }
   }
 
-  if (msg.type === "question") {
-    questionText.textContent = msg.text;
-    voteFeedback.textContent = "";
-    voteButtons.style.display = "flex";
+  if (msg.type === "start_question") {
+    if (!name) return;
+    currentQuestion = msg.question;
+    questionText.textContent = currentQuestion;
+    voteButtons.style.display = "block";
+    feedbackEl.textContent = "";
     showTimer(12);
   }
 
   if (msg.type === "match_result") {
-    voteButtons.style.display = "none";
-    questionText.textContent = msg.name;
-    if (msg.correct) {
-      voteFeedback.textContent = "Yes! Je voelt dit koppel perfect aan.";
-    } else {
-      voteFeedback.textContent = "Oeps, Stefanie en Mathieu denken er precies anders over.";
-    }
+    if (!name || !msg.votes) return;
+    const vote = msg.votes[name];
+    const same = vote === msg.winner;
+    questionText.textContent = msg.winner;
+    feedbackEl.textContent = same
+      ? "Yes! Je voelt dit koppel perfect aan."
+      : "Oeps, Stefanie en Mathieu denken er precies anders over ;)";
   }
 
-  if (msg.type === "mismatch_warning") {
-    voteButtons.style.display = "none";
-    voteFeedback.textContent = "Oh nee � Stefanie & Mathieu hebben niet hetzelfde geantwoord � dan gebeuren er rare dingen, kijk maar mee op het grote scherm";
+  if (msg.type === "audience_result") {
+    if (!name || !msg.votes) return;
+    const vote = msg.votes[name];
+    const stef = Object.values(msg.votes).filter(v => v === "Stefanie").length;
+    const math = Object.values(msg.votes).filter(v => v === "Mathieu").length;
+    const same = vote && vote === (stef > math ? "Stefanie" : "Mathieu");
+    questionText.textContent = stef > math ? "Stefanie" : "Mathieu";
+    feedbackEl.textContent = same
+      ? "Yes! Je voelt dit koppel perfect aan. 🥰"
+      : "Oeps, Stefanie en Mathieu denken er precies anders over. 🤭";
   }
-});
 
-function updateScreen(screen) {
-  if (["start", "intro", "rules", "qr"].includes(screen)) {
-    voteFeedback.textContent = "";
-    voteButtons.style.display = "none";
-    questionText.textContent = "Welkom! We starten zo meteen.";
-  }
-}
-
-startButton.addEventListener("click", () => {
-  const val = nameInput.value.trim();
-  if (val !== "") {
-    name = val;
-    nameInput.style.display = "none";
-    startButton.style.display = "none";
-    socket.send(JSON.stringify({ type: "register", name }));
-  }
-});
-
-stefanieBtn.addEventListener("click", () => {
-  if (name !== "") {
-    socket.send(JSON.stringify({ vote: "Stefanie" }));
-    voteButtons.style.display = "none";
-    voteFeedback.textContent = "Wachten op de resultaten...";
-  }
-});
-
-mathieuBtn.addEventListener("click", () => {
-  if (name !== "") {
-    socket.send(JSON.stringify({ vote: "Mathieu" }));
-    voteButtons.style.display = "none";
-    voteFeedback.textContent = "Wachten op de resultaten...";
+  if (msg.type === "mismatch") {
+    feedbackEl.textContent = "Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dan gebeuren er rare dingen, kijk maar mee op het grote scherm 🙈";
   }
 });

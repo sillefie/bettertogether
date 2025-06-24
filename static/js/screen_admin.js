@@ -1,4 +1,5 @@
-const socket = new WebSocket(`ws://${location.host}/ws/admin`);
+
+const socket = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/admin`);
 
 const questionSelect = document.getElementById("question-select");
 const votesList = document.getElementById("votes-list");
@@ -29,42 +30,51 @@ socket.addEventListener("message", (event) => {
   }
 });
 
-function setScreen(screen) {
-  socket.send(JSON.stringify({ type: "set_screen", screen }));
-  if (screen === "question") {
-    requestVotes();
+function sendIfReady(message) {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(message));
+  } else {
+    console.warn("WebSocket not open yet.");
   }
+}
+
+function setScreen(screen) {
+  sendIfReady({ type: "set_screen", screen });
 }
 
 function startQuestion() {
   const idx = questionSelect.value;
-  socket.send(JSON.stringify({ type: "start_question", index: idx }));
+  sendIfReady({ type: "start_question", index: idx });
 }
 
 function sendMatchResult(name) {
   const idx = questionSelect.value;
-  socket.send(JSON.stringify({ type: "match_result", index: idx, name }));
+  sendIfReady({ type: "match_result", index: idx, name });
 }
 
 function sendMismatch() {
   const idx = questionSelect.value;
-  socket.send(JSON.stringify({ type: "mismatch_warning", index: idx }));
+  sendIfReady({ type: "mismatch_warning", index: idx });
 }
 
 function showAiImage() {
-  socket.send(JSON.stringify({ type: "show_ai" }));
+  sendIfReady({ type: "show_ai" });
 }
 
 function repeatAiImage() {
-  socket.send(JSON.stringify({ type: "repeat_ai" }));
+  sendIfReady({ type: "repeat_ai" });
 }
 
 function hideAiImage() {
-  socket.send(JSON.stringify({ type: "hide_ai" }));
+  sendIfReady({ type: "hide_ai" });
 }
 
 function requestVotes() {
-  socket.send(JSON.stringify({ type: "get_votes" }));
+  sendIfReady({ type: "get_votes" });
+}
+
+function showAudienceResult() {
+  sendIfReady({ type: "audience_result" });
 }
 
 function updateVotes(votes) {
