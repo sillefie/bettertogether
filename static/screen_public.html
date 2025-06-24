@@ -8,15 +8,18 @@
 <body>
   <div id="intro">
     <h1>Welkom!</h1>
-    <p>We starten zo meteen.</p>
-    <input id="nameInput" placeholder="Jouw naam">
-    <button id="nameRegister" onclick="register()">Start</button>
+    <div id="NaamInvullen" style="display:none">
+        <p>Vul je naam in om mee te doen!</p>
+        <input id="nameInput" placeholder="Jouw naam">
+        <button id="nameRegister" onclick="register()">Start</button>
+      </div>
+    <p id="StartinginaSecond" style="display:none">We starten zo meteen.</p>
   </div>
 
   <div id="question" style="display:none">
     <h2 id="questionText"></h2>
-    <button onclick="vote('bruid')">👰 Bruid</button>
-    <button onclick="vote('bruidegom')">🤵 Bruidegom</button>
+    <button onclick="vote('bruid')">👰 Stefanie</button>
+    <button onclick="vote('bruidegom')">🤵 Mathieu</button>
   </div>
 
   <div id="waiting" style="display:none">
@@ -26,7 +29,6 @@
 
   <div id="feedback" style="display:none">
     <h2 id="feedbackText"></h2>
-    <img id="aiImage" style="max-width:300px;display:none">
   </div>
 
   <div id="scoreboard" style="display:none">

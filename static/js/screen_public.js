@@ -9,8 +9,8 @@ function register() {
     return;
   }
   ws.send(JSON.stringify({ type: "register", name: name }));
-  document.getElementById("nameInput").style.display = "none";
-  document.getElementById("nameRegister").style.display = "none";
+  document.getElementById("NaamInvullen").style.display = "none";
+  document.getElementById("StartinginaSecond").style.display = "";
   currentScreen = "intro";
 }
 
