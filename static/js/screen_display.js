@@ -1,10 +1,33 @@
 const socket = new WebSocket(`wss://${location.host}/ws/public`);
+const introAudio = new Audio("/audio/intro.mp3");
+const rulesAudio = new Audio("/audio/rules.mp3");
+
+window.addEventListener("load", () => {
+  introAudio.play().then(() => {
+    introAudio.pause();
+    introAudio.currentTime = 0;
+  }).catch(() => {});
+
+  rulesAudio.play().then(() => {
+    rulesAudio.pause();
+    rulesAudio.currentTime = 0;
+  }).catch(() => {});
+});
+
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
     if (data.type === "screen") {
-        showScreen(data.screen);
+      showScreen(data.screen);
+
+      if (data.screen === "intro") {
+        introAudio.play();
+      }
+
+      if (data.screen === "spelregels") {
+        rulesAudio.play();
+      }
     }
 
     if (data.type === "question") {
