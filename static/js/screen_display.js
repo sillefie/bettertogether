@@ -123,3 +123,30 @@ socket.addEventListener("message", (event) => {
 function startTimer(seconds) {
   // placeholder voor visuele timer als gewenst
 }
+
+
+socket.addEventListener("message", (event) => {
+  const msg = JSON.parse(event.data);
+
+  if (msg.type === "ai_image") {
+    const imgEl = document.getElementById("ai-image");
+    if (imgEl) {
+      imgEl.src = "/static/img/" + msg.image;
+      imgEl.style.display = "block";
+    }
+  }
+
+  if (msg.type === "match") {
+    const feedbackEl = document.getElementById("result-feedback");
+    if (feedbackEl) {
+      feedbackEl.textContent = "Match! Ze gaven hetzelfde antwoord.";
+    }
+  }
+
+  if (msg.type === "ai_done") {
+    const feedbackEl = document.getElementById("result-feedback");
+    if (feedbackEl) {
+      feedbackEl.textContent = "Alle AI-foto's zijn al getoond.";
+    }
+  }
+});

@@ -157,3 +157,93 @@ async def websocket_display(ws: WebSocket):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=10000)
+
+
+@app.websocket("/ws/admin")
+async def websocket_admin(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            message = await websocket.receive_text()
+            data = json.loads(message)
+            if data.get("command") == "get_questions":
+                await websocket.send_text(json.dumps({
+                    "type": "questions",
+                    "questions": [
+                        "Wie is het vaakst te laat?",
+                        "Wie kookt er beter?",
+                        "Wie kan er beter met geld om?",
+                        "Wie heeft de grootste schoenenverzameling?"
+                    ]
+                }))
+    except WebSocketDisconnect:
+        pass
+
+
+ai_images = ["ai1.jpg", "ai2.jpg", "ai3.jpg", "ai4.jpg", "ai5.jpg"]
+used_ai = []
+
+current_votes = []
+current_question = ""
+
+@app.websocket("/ws/admin")
+async def websocket_admin(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        global current_votes, current_question, used_ai
+        while True:
+            message = await websocket.receive_text()
+            data = json.loads(message)
+
+            if data.get("command") == "get_questions":
+                await websocket.send_text(json.dumps({
+                    "type": "questions",
+                    "questions": [
+                        "Wie is het vaakst te laat?",
+                        "Wie kookt er beter?",
+                        "Wie kan er beter met geld om?",
+                        "Wie heeft de grootste schoenenverzameling?"
+                    ]
+                }))
+
+            elif data.get("command") == "start_question":
+                current_question = data.get("question", "")
+                current_votes = []
+                await websocket.send_text(json.dumps({
+                    "type": "screen",
+                    "screen": "question",
+                    "question": current_question
+                }))
+
+            elif data.get("command") == "vote":
+                name = data.get("name")
+                vote = data.get("vote")
+                if name and vote:
+                    current_votes.append({"name": name, "vote": vote})
+                    await websocket.send_text(json.dumps({
+                        "type": "votes",
+                        "votes": current_votes
+                    }))
+
+            elif data.get("command") == "match":
+                await websocket.send_text(json.dumps({
+                    "type": "match",
+                    "result": "same"
+                }))
+
+            elif data.get("command") == "no_match":
+                if len(used_ai) == len(ai_images):
+                    await websocket.send_text(json.dumps({
+                        "type": "ai_done"
+                    }))
+                else:
+                    for img in ai_images:
+                        if img not in used_ai:
+                            used_ai.append(img)
+                            await websocket.send_text(json.dumps({
+                                "type": "ai_image",
+                                "image": img
+                            }))
+                            break
+    except WebSocketDisconnect:
+        pass

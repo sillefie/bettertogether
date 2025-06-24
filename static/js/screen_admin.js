@@ -97,3 +97,15 @@ function updateVotes(votes) {
         votesList.appendChild(li);
     }
 }
+
+document.getElementById("match-stefanie").addEventListener("click", () => {
+  socket.send(JSON.stringify({ command: "match", winner: "Stefanie" }));
+});
+
+document.getElementById("match-mathieu").addEventListener("click", () => {
+  socket.send(JSON.stringify({ command: "match", winner: "Mathieu" }));
+});
+
+document.getElementById("no-match").addEventListener("click", () => {
+  socket.send(JSON.stringify({ command: "no_match" }));
+});
