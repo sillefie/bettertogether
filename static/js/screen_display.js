@@ -1,58 +1,46 @@
-const socket = new WebSocket(`wss://${location.host}/ws/public`);
+
+const socket = new WebSocket(`wss://${location.host}/ws/display`);
+
+window.socket = socket; // voor inline gebruik
+
+socket.onopen = () => {
+    console.log('Display websocket connected');
+};
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-
-    if (data.type === "screen") {
-        showScreen(data.screen);
-    }
-
-    if (data.type === "question") {
-        document.getElementById("question_text").textContent = data.text;
-        showScreen("vote");
-    }
-
-    if (data.type === "feedback") {
-        const feedback = document.getElementById("feedback");
-        const img = document.getElementById("ai_img");
-        const voteList = document.getElementById("live_votes");
-
-        if (data.result === "correct") {
-            feedback.textContent = "✓ Jullie antwoordden hetzelfde!";
-            feedback.style.color = "green";
-            img.style.display = "none";
-        } else {
-            feedback.textContent = "😅 Verschillende antwoorden!";
-            img.src = "/" + data.image;
-            img.style.display = "block";
-        }
-
-        voteList.innerHTML = "";
-        if (data.votes) {
-            Object.entries(data.votes).forEach(([name, vote]) => {
-                const li = document.createElement("li");
-                li.textContent = `${name}: ${vote}`;
-                voteList.appendChild(li);
-            });
-        }
-
-        showScreen("feedback");
-    }
-
-    if (data.type === "scoreboard") {
-        const list = document.getElementById("ranking");
-        list.innerHTML = "";
-        data.ranking.forEach(([name, score]) => {
-            const li = document.createElement("li");
-            li.textContent = `${name}: ${score}`;
-            list.appendChild(li);
-        });
-        showScreen("scoreboard");
+    document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+    switch(data.screen) {
+        case 'start':
+            document.getElementById('screen_start').style.display = 'block';
+            break;
+        case 'intro':
+            document.getElementById('screen_intro').style.display = 'block';
+            const introAudio = document.getElementById('intro_audio');
+            introAudio.play().catch(e => console.warn('Audio play failed', e));
+            break;
+        case 'uitleg':
+            document.getElementById('screen_uitleg').style.display = 'block';
+            const rulesVideo = document.getElementById('rules_video');
+            rulesVideo.play().catch(e => console.warn('Video play failed', e));
+            break;
+        case 'qr':
+            document.getElementById('screen_qr').style.display = 'block';
+            break;
+        case 'vote':
+            document.getElementById('screen_vote').style.display = 'block';
+            if(data.question) {
+                document.getElementById('question_text').textContent = data.question;
+            }
+            break;
+        case 'feedback':
+            document.getElementById('screen_feedback').style.display = 'block';
+            if(data.feedback_text) {
+                document.getElementById('feedback_text').textContent = data.feedback_text;
+            }
+            // Stem balken updates hier als nodig
+            break;
+        default:
+            console.warn('Onbekend scherm:', data.screen);
     }
 };
-
-function showScreen(name) {
-    document.querySelectorAll(".screen").forEach(el => el.style.display = "none");
-    const s = document.getElementById(`screen_${name}`);
-    if (s) s.style.display = "block";
-}
