@@ -39,7 +39,7 @@ socket.onmessage = (event) => {
             img.src = "/" + data.image;
             img.style.display = "block";
         }
-        if (data.result === "crowdsame") {
+        /** if (data.result === "crowdsame") {
             if (data.result === "over20") {
                 answerCrowd.textContent = "Amaai, iedereen hier kent jullie door en door ?.";
             } else {
@@ -56,7 +56,7 @@ socket.onmessage = (event) => {
             }
                 feedback.style.color = "black";
                 img.style.display = "none";
-        }
+        } **/
 
         voteList.innerHTML = "";
         if (data.votes) {
