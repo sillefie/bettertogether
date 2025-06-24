@@ -1,6 +1,11 @@
 
 const socket = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/admin`);
 
+
+// Disable all control buttons until socket is open
+const controlButtons = Array.from(document.querySelectorAll("button"));
+controlButtons.forEach(btn => btn.disabled = true);
+
 const questionSelect = document.getElementById("question-select");
 const votesList = document.getElementById("votes-list");
 
@@ -8,6 +13,9 @@ let currentQuestions = [];
 
 socket.addEventListener("open", () => {
   console.log("Verbonden met server");
+  // Enable buttons now that socket is connected
+  controlButtons.forEach(btn => btn.disabled = false);
+
   socket.send(JSON.stringify({ type: "get_questions" }));
 });
 

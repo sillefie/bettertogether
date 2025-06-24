@@ -150,4 +150,10 @@ async def websocket_display(ws: WebSocket):
         while True:
             await ws.receive_text()
     except WebSocketDisconnect:
-        display_clients.remove(ws)
+        display_clients.remove(ws
+elif type == "get_questions":
+    await websocket.send(json.dumps({
+        "type": "questions",
+        "questions": state["questions"]
+    }))
+)

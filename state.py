@@ -1,20 +1,11 @@
-import json
-import os
+# Permanent geheugen voor app
 
-STATE_FILE = "state.json"
+state = {
+    "votes": {},
+    "used_ai": [],
+    "last_ai": None,
+    "questions": ["Wie heeft de gekste familie?", "Wie zou er het best voor een zwijn kunnen zorgen?", "Wie heeft er als eerste ‘ik zie je graag’ gezegd?", "Wie geeft er het meeste geld uit?", "Wie is de meeste creatieve?", "Wie zou het snelst uit zijn comfort zone gaan om de ander te verassen?", "Wie heeft als eerste voorgesteld om seks te hebben op een openbare plaats?", "Van wie hebben de kinderen de meeste eigenschappen?", "Wie heeft de ander verleid?", "Wie doet er het meest aan ‘dirty talk’ in de slaapkamer?", "Wie van de twee lijkt het meest op zijn/haar respectievelijke vader/moeder?", "Wie doet de ander het meeste lachen?"]
+}
 
-def load_state():
-    if not os.path.exists(STATE_FILE):
-        return {}
-    try:
-        with open(STATE_FILE, "r") as f:
-            content = f.read().strip()
-            if not content:
-                return {}
-            return json.loads(content)
-    except json.JSONDecodeError:
-        return {}
-
-def save_state(data: dict):
-    with open(STATE_FILE, "w") as f:
-        json.dump(data, f)
+def reset_votes():
+    state["votes"] = {}
