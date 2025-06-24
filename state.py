@@ -1,21 +1,35 @@
 import json
-from pathlib import Path
+import os
 
-STATE_FILE = Path("state.json")
+STATE_FILE = "state.json"
 
 def load_state():
-    if STATE_FILE.exists():
-        with open(STATE_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {
-        "current_screen": "start",
-        "current_question": None,
-        "votes": {},
-        "result": None,
-        "match": None,
-        "questions": []
-    }
+    if os.path.exists(STATE_FILE):
+        with open(STATE_FILE, "r") as f:
+            raw = json.load(f)
+            return {
+                "screen": raw.get("screen", "intro"),
+                "question_idx": raw.get("question_idx", -1),
+                "players": raw.get("players", {}),
+                "votes": raw.get("votes", {}),
+                "used_ai": raw.get("used_ai", [])
+            }
+    else:
+        return {
+            "screen": "intro",
+            "question_idx": -1,
+            "players": {},
+            "votes": {},
+            "used_ai": []
+        }
 
 def save_state(state):
-    with open(STATE_FILE, "w", encoding="utf-8") as f:
-        json.dump(state, f)
+    data = {
+        "screen": state.get("screen", "intro"),
+        "question_idx": state.get("question_idx", -1),
+        "players": state.get("players", {}),
+        "votes": state.get("votes", {}),
+        "used_ai": state.get("used_ai", [])
+    }
+    with open(STATE_FILE, "w") as f:
+        json.dump(data, f)

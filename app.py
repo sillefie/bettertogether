@@ -51,12 +51,10 @@ state = load_state()
 
 def reset_votes():
     state["votes"] = {}
-    state["players"] = {}
     save_state(state)
 
 public_clients = {}
 admin_clients = []
-display_clients = []
 
 async def broadcast(targets, message):
     for ws in targets:
@@ -96,7 +94,6 @@ async def websocket_admin(ws: WebSocket):
     await ws.accept()
     admin_clients.append(ws)
     await ws.send_json({"type": "screen", "screen": state["screen"]})
-    await ws.send_json({"type": "questions", "questions": questions})
     try:
         while True:
             data = await ws.receive_json()
@@ -105,7 +102,6 @@ async def websocket_admin(ws: WebSocket):
                 state["screen"] = data["screen"]
                 save_state(state)
                 await broadcast(public_clients.values(), {"type": "screen", "screen": state["screen"]})
-                await broadcast(display_clients, {"type": "screen", "screen": state["screen"]})
             elif cmd == "set_question":
                 idx = int(data["idx"])
                 if 0 <= idx < len(questions):
@@ -119,36 +115,22 @@ async def websocket_admin(ws: WebSocket):
                     })
                     await broadcast(admin_clients, {"type": "votes", "votes": state["votes"]})
             elif cmd == "same_answer":
-                result = data.get("result")
-                correct_name = data.get("name")
-                for uid, client_ws in public_clients.items():
-                    player_name = state["players"].get(uid, "")
-                    voted = state["votes"].get(player_name)
-                    is_correct = (voted == correct_name)
-                    msg = {
-                        "type": "match_result",
-                        "name": correct_name,
-                        "correct": is_correct
-                    }
-                    await client_ws.send_json(msg)
+                await broadcast(public_clients.values(), {"type": "feedback", "result": "correct"})
             elif cmd == "different_answer":
-                await broadcast(public_clients.values(), {
-                    "type": "mismatch_warning"
-                })
-            elif cmd == "feedback":
-                await broadcast(display_clients, data["payload"])
+                available = [f"img/ai{i}.jpg" for i in range(1, 6) if f"img/ai{i}.jpg" not in state["used_ai"]]
+                if not available:
+                    available = [f"img/ai{i}.jpg" for i in range(1, 6)]
+                    state["used_ai"] = []
+                chosen = random.choice(available)
+                state["used_ai"].append(chosen)
+                save_state(state)
+                await broadcast(public_clients.values(), {"type": "feedback", "result": "wrong", "image": chosen})
+            elif cmd == "end_quiz":
+                counts = {}
+                for name in state["votes"]:
+                    vote = state["votes"][name]
+                    counts[vote] = counts.get(vote, 0) + 1
+                top10 = sorted(counts.items(), key=lambda x: x[1], reverse=True)[:10]
+                await broadcast(public_clients.values(), {"type": "scoreboard", "ranking": top10})
     except WebSocketDisconnect:
-        if ws in admin_clients:
-            admin_clients.remove(ws)
-
-@app.websocket("/ws/display")
-async def websocket_display(ws: WebSocket):
-    await ws.accept()
-    display_clients.append(ws)
-    await ws.send_json({"type": "screen", "screen": state["screen"]})
-    try:
-        while True:
-            await ws.receive_text()
-    except WebSocketDisconnect:
-        if ws in display_clients:
-            display_clients.remove(ws)
+        admin_clients.remove(ws)
