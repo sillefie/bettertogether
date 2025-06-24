@@ -1,11 +1,21 @@
-# Permanent geheugen voor app
+import json
+from pathlib import Path
 
-state = {
-    "votes": {},
-    "used_ai": [],
-    "last_ai": None,
-    "questions": ["Wie heeft de gekste familie?", "Wie zou er het best voor een zwijn kunnen zorgen?", "Wie heeft er als eerste ‘ik zie je graag’ gezegd?", "Wie geeft er het meeste geld uit?", "Wie is de meeste creatieve?", "Wie zou het snelst uit zijn comfort zone gaan om de ander te verassen?", "Wie heeft als eerste voorgesteld om seks te hebben op een openbare plaats?", "Van wie hebben de kinderen de meeste eigenschappen?", "Wie heeft de ander verleid?", "Wie doet er het meest aan ‘dirty talk’ in de slaapkamer?", "Wie van de twee lijkt het meest op zijn/haar respectievelijke vader/moeder?", "Wie doet de ander het meeste lachen?"]
-}
+STATE_FILE = Path("state.json")
 
-def reset_votes():
-    state["votes"] = {}
+def load_state():
+    if STATE_FILE.exists():
+        with open(STATE_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {
+        "current_screen": "start",
+        "current_question": None,
+        "votes": {},
+        "result": None,
+        "match": None,
+        "questions": []
+    }
+
+def save_state(state):
+    with open(STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump(state, f)
