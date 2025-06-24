@@ -1,6 +1,4 @@
 const socket = new WebSocket(`wss://${location.host}/ws/public`);
-const introAudio = document.getElementById("my-audio");
-const rulesAudio = document.getElementById("my-video");
 
 window.addEventListener("load", () => {
   introAudio.play().then(() => {
@@ -20,18 +18,6 @@ socket.onmessage = (event) => {
 
     if (data.type === "screen") {
       showScreen(data.screen);
-
-      if (data.screen === "intro") {
-        introAudio.play().catch(() => {
-          console.warn("Autoplay geblokkeerd");
-        });
-      }
-
-      if (data.screen === "spelregels") {
-        rulesAudio.play().catch(() => {
-          console.warn("Autoplay geblokkeerd");
-        });
-      }
     }
 
     if (data.type === "question") {
