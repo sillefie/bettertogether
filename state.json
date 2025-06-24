@@ -1,9 +1,1 @@
-// state.json
-
-{
-  "screen": "start",
-  "question_idx": 0,
-  "votes": {},
-  "players": {},
-  "used_ai": []
-}
+{}
