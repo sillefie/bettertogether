@@ -27,13 +27,11 @@ socket.onmessage = (event) => {
 
     if (data.type === "feedback") {
         const feedback = document.getElementById("feedback");
-        const answerStem = document.getElementById("answerStem");
-        const answerCrowd = document.getElementById("answerCrowd");
         const img = document.getElementById("ai_img");
         const voteList = document.getElementById("live_votes");
         
         if (data.result === "correct") {
-            answerStem.textContent = "✓ Jeeej! Stefanie en Mathieu dachten er hetzelfde over! Dat verdient een pakske!";
+            feedback.textContent = "✓ Jeeej! Stefanie en Mathieu dachten er hetzelfde over! Dat verdient een pakske!";
             feedback.style.color = "green";
             img.style.display = "none";
         } else {
