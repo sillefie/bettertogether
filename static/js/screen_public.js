@@ -9,13 +9,14 @@ function register() {
     return;
   }
   ws.send(JSON.stringify({ type: "register", name: name }));
-  document.getElementById("intro").style.display = "none";
-  document.getElementById("waiting").style.display = "";  // ? TOEVOEGEN
-  currentScreen = "waiting";
+  document.getElementById("nameInput").style.display = "none";
+  document.getElementById("nameRegister").style.display = "none";
+  currentScreen = "intro";
 }
 
 function vote(v) {
   ws.send(JSON.stringify({ vote: v }));
+  document.getElementById("intro").style.display = "none";
   document.getElementById("question").style.display = "none";
   document.getElementById("waiting").style.display = "";
 }
