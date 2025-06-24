@@ -1,95 +1,99 @@
+const socket = new WebSocket(`wss://${location.host}/ws/admin`);
 
-const socket = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/admin`);
-
-
-// Disable all control buttons until socket is open
-const controlButtons = Array.from(document.querySelectorAll("button"));
-controlButtons.forEach(btn => btn.disabled = true);
-
-const questionSelect = document.getElementById("question-select");
-const votesList = document.getElementById("votes-list");
-
+const questionSelect = document.getElementById("question_select");
+const votesList = document.getElementById("votes_list");
+const screenStatus = document.getElementById("screen_status");
 let currentQuestions = [];
 
 socket.addEventListener("open", () => {
-  console.log("Verbonden met server");
-  // Enable buttons now that socket is connected
-  controlButtons.forEach(btn => btn.disabled = false);
+    console.log("✅ Verbonden met server");
 
-  socket.send(JSON.stringify({ type: "get_questions" }));
+    // Vraag meteen de vragenlijst op
+    socket.send(JSON.stringify({ command: "get_questions" }));
 });
 
 socket.addEventListener("message", (event) => {
-  const msg = JSON.parse(event.data);
+    const data = JSON.parse(event.data);
 
-  if (msg.type === "questions") {
-    currentQuestions = msg.questions;
-    questionSelect.innerHTML = "";
-    msg.questions.forEach((q, idx) => {
-      const option = document.createElement("option");
-      option.value = idx;
-      option.textContent = q;
-      questionSelect.appendChild(option);
-    });
-  }
+    if (data.type === "screen") {
+        screenStatus.textContent = data.screen;
+    }
 
-  if (msg.type === "votes") {
-    updateVotes(msg.votes);
-  }
+    if (data.type === "votes") {
+        updateVotes(data.votes);
+    }
+
+    if (data.type === "questions") {
+        currentQuestions = data.questions;
+        questionSelect.innerHTML = "";
+        data.questions.forEach((q, idx) => {
+            const option = document.createElement("option");
+            option.value = idx;
+            option.textContent = q;
+            questionSelect.appendChild(option);
+        });
+    }
 });
 
-function sendIfReady(message) {
-  if (socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(message));
-  } else {
-    console.warn("WebSocket not open yet.");
-  }
+
+function sendCommand(command, extra = {}) {
+    if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ command, ...extra }));
+    } else {
+        console.warn("⚠️ WebSocket niet open");
+    }
 }
 
-function setScreen(screen) {
-  sendIfReady({ type: "set_screen", screen });
+function setScreen(screenName) {
+    sendCommand("set_screen", { screen: screenName });
 }
 
 function startQuestion() {
-  const idx = questionSelect.value;
-  sendIfReady({ type: "start_question", index: idx });
+    const idx = questionSelect.value;
+    sendCommand("set_question", { idx: parseInt(idx) });
 }
 
 function sendMatchResult(name) {
-  const idx = questionSelect.value;
-  sendIfReady({ type: "match_result", index: idx, name });
+    const idx = questionSelect.value;
+    sendCommand("match_result", { idx: parseInt(idx), name });
 }
 
 function sendMismatch() {
-  const idx = questionSelect.value;
-  sendIfReady({ type: "mismatch_warning", index: idx });
-}
-
-function showAiImage() {
-  sendIfReady({ type: "show_ai" });
-}
-
-function repeatAiImage() {
-  sendIfReady({ type: "repeat_ai" });
-}
-
-function hideAiImage() {
-  sendIfReady({ type: "hide_ai" });
-}
-
-function requestVotes() {
-  sendIfReady({ type: "get_votes" });
+    const idx = questionSelect.value;
+    sendCommand("mismatch_warning", { idx: parseInt(idx) });
 }
 
 function showAudienceResult() {
-  sendIfReady({ type: "audience_result" });
+    sendCommand("audience_result");
 }
 
+function showAiImage() {
+    sendCommand("show_ai");
+}
+
+function repeatAiImage() {
+    sendCommand("repeat_ai");
+}
+
+function hideAiImage() {
+    sendCommand("hide_ai");
+}
+
+function endQuiz() {
+    sendCommand("end_quiz");
+}
+
+function requestVotes() {
+    sendCommand("get_votes");
+}
+
+// ---- Stemmen updaten ----
+
 function updateVotes(votes) {
-  votesList.innerHTML = "";
-  for (const [name, vote] of Object.entries(votes)) {
-    const li = document.createElement("li");
-    li.textContent = `${name}: ${vote}`;
-    votesList.appendChild(li);
-  }
+    votesList.innerHTML = "";
+    for (const [name, vote] of Object.entries(votes)) {
+        const li = document.createElement("li");
+        li.textContent = `${name}: ${vote}`;
+        votesList.appendChild(li);
+    }
 }
