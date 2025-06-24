@@ -152,3 +152,8 @@ async def websocket_display(ws: WebSocket):
     except WebSocketDisconnect:
         if ws in display_clients:
             display_clients.remove(ws)
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=10000)
