@@ -89,47 +89,6 @@ async def websocket_public(ws: WebSocket):
         state["players"].pop(uid, None)
         save_state(state)
 
-
-
-@app.post("/screen/qr")
-async def set_screen_qr():
-    state = load_state()
-    state["screen"] = "qr"
-    save_state(state)
-    return {"status": "ok", "screen": "qr"}
-
-
-
-from fastapi import Request
-
-@app.post("/vote")
-async def vote(request: Request):
-    data = await request.json()
-    name = data.get("name")
-    choice = data.get("choice")
-    if not name or not choice:
-        return {"status": "error", "reason": "missing name or choice"}
-    success = add_vote(name, choice)
-    if success:
-        return {"status": "ok"}
-    else:
-        return {"status": "error", "reason": "name not registered"}
-
-@app.get("/results")
-async def get_results():
-    summary = get_vote_summary()
-    return summary
-
-
-
-@app.get("/ai-image")
-async def get_ai_image():
-    path = get_next_ai_image()
-    if path:
-        return {"image": f"/img/{path}"}
-    else:
-        return {"image": None}
-
 @app.websocket("/ws/admin")
 async def websocket_admin(ws: WebSocket):
     await ws.accept()

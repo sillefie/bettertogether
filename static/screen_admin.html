@@ -6,48 +6,6 @@
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-
-<div id="admin-controls">
-    <button onclick="registerMatch('Stefanie')">Zelfde antwoord Stefanie</button>
-    <button onclick="registerMatch('Mathieu')">Zelfde antwoord Mathieu</button>
-    <button onclick="showPublicFeedback()">Antwoord publiek tonen</button>
-</div>
-
-<div id="admin-ai-controls">
-    <button onclick="showMismatchImage()">Toon AI-foto</button>
-    <button onclick="showMismatchImage()">Herhaal AI-foto</button>
-    <button onclick="hideMismatch()">Verberg foto</button>
-</div>
-
-
-<script>
-function registerMatch(answer) {
-    // stuur gekozen antwoord op
-    fetch("/admin/match", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answer: answer })
-    }).then(() => {
-        triggerFeedback();
-    });
-}
-
-function showPublicFeedback() {
-    triggerFeedback();
-}
-
-function triggerFeedback() {
-    fetch("/results").then(res => res.json()).then(data => {
-        // stuur opdracht naar display om result-screen te tonen (als er websocket is, kan dit via socket)
-        if (typeof showResultsDisplay === 'function') {
-            showResultsDisplay(); // dit werkt als display dezelfde JS laadt
-        }
-    });
-
-    // en publiek krijgt via polling hun eigen feedback
-}
-</script>
-
   <div id="admin">
     <h1>Bedieningspaneel</h1>
 
