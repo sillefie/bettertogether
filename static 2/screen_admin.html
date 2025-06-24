@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="admin">
+    <h1>Bedieningspaneel</h1>
+
+    
+<section>
+  <h2>Schermsturing</h2>
+  <button onclick="setScreen('start')">Startscherm</button>
+  <button onclick="setScreen('intro')">Intro</button>
+  <button onclick="setScreen('uitleg')">Spelregels</button>
+  <button onclick="setScreen('qr')">QR tonen</button>
+  <button onclick="setScreen('vote')">Vraag tonen</button>
+  <button onclick="setScreen('feedback')">Antwoord publiek</button>
+</section>
+
+<section>
+  <h2>Vraag kiezen</h2>
+  <select id="questionSelect"></select>
+  <button onclick="sendSelectedQuestion()">Start vraag</button>
+</section>
+
+<section>
+  <h2>Antwoord check</h2>
+  <button onclick="confirmSame()">Zelfde antwoord</button>
+  <button onclick="confirmDifferent()">Verschillend antwoord</button>
+  <button onclick="showNewAI()">Toon AI-foto</button>
+  <button onclick="showRepeatAI()">Herhaal AI-foto</button>
+  <button onclick="hideAI()">Verberg AI-foto</button>
+</section>
+
+<section>
+  <h2>Huidige stemmen</h2>
+  <ul id="votes_list"></ul>
+</section>
+</body>
+</html>
