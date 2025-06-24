@@ -1,110 +1,59 @@
+let ws = new WebSocket("wss://" + location.host + "/ws/public");
 
-const socket = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws/public`);
+let currentScreen = "intro";
 
-const nameInput = document.getElementById("name-input");
-const startButton = document.getElementById("start-button");
-const welcomeText = document.getElementById("welcome-text");
-const voteButtons = document.getElementById("vote-buttons");
-const stefanieBtn = document.getElementById("vote-stefanie");
-const mathieuBtn = document.getElementById("vote-mathieu");
-const questionText = document.getElementById("question-text");
-const feedbackEl = document.getElementById("vote-feedback");
-const timerEl = document.getElementById("timer");
-
-let name = "";
-let currentQuestion = "";
-
-function showTimer(seconds) {
-  let remaining = seconds;
-  timerEl.textContent = `${remaining}s`;
-  timerEl.style.display = "block";
-  const interval = setInterval(() => {
-    remaining--;
-    if (remaining <= 0) {
-      clearInterval(interval);
-      timerEl.style.display = "none";
-      voteButtons.style.display = "none";
-    } else {
-      timerEl.textContent = `${remaining}s`;
-    }
-  }, 1000);
+function register() {
+  const name = document.getElementById("nameInput").value;
+  ws.send(JSON.stringify({ type: "register", name: name }));
+  document.getElementById("intro").style.display = "none";
+  currentScreen = "waiting";
 }
 
-startButton.addEventListener("click", () => {
-  name = nameInput.value.trim();
-  if (name) {
-    nameInput.style.display = "none";
-    startButton.style.display = "none";
-    welcomeText.textContent = "Welkom! We starten zo meteen.";
-  }
-});
+function vote(v) {
+  ws.send(JSON.stringify({ vote: v }));
+  document.getElementById("question").style.display = "none";
+  document.getElementById("waiting").style.display = "";
+}
 
-stefanieBtn.addEventListener("click", () => {
-  if (!name) return;
-  socket.send(JSON.stringify({ type: "vote", name: name, vote: "Stefanie" }));
-  voteButtons.style.display = "none";
-  feedbackEl.textContent = "Wacht op resultaten...";
-});
-
-mathieuBtn.addEventListener("click", () => {
-  if (!name) return;
-  socket.send(JSON.stringify({ type: "vote", name: name, vote: "Mathieu" }));
-  voteButtons.style.display = "none";
-  feedbackEl.textContent = "Wacht op resultaten...";
-});
-
-socket.addEventListener("message", (event) => {
+ws.onmessage = (event) => {
   const msg = JSON.parse(event.data);
-
-  if (msg.type === "set_screen") {
-    feedbackEl.textContent = "";
-    questionText.textContent = "";
-    voteButtons.style.display = "none";
-    timerEl.style.display = "none";
-    if (msg.screen === "start" || msg.screen === "intro" || msg.screen === "rules" || msg.screen === "qr") {
-      welcomeText.textContent = "Welkom! We starten zo meteen.";
-      if (name) {
-        nameInput.style.display = "none";
-        startButton.style.display = "none";
-      } else {
-        nameInput.style.display = "inline-block";
-        startButton.style.display = "inline-block";
-      }
+  if (msg.type === "screen") {
+    if (msg.screen === "question") {
+      document.getElementById("question").style.display = "";
+      document.getElementById("waiting").style.display = "none";
+      document.getElementById("feedback").style.display = "none";
+      document.getElementById("scoreboard").style.display = "none";
+    } else {
+      document.getElementById("question").style.display = "none";
     }
+  } else if (msg.type === "question") {
+    document.getElementById("questionText").innerText = msg.text;
+    document.getElementById("question").style.display = "";
+    document.getElementById("waiting").style.display = "none";
+    document.getElementById("feedback").style.display = "none";
+    document.getElementById("scoreboard").style.display = "none";
+  } else if (msg.type === "feedback") {
+    document.getElementById("question").style.display = "none";
+    document.getElementById("waiting").style.display = "none";
+    document.getElementById("feedback").style.display = "";
+    if (msg.result === "correct") {
+      document.getElementById("feedbackText").innerText = "🎉 Jullie antwoorden kwamen overeen!";
+      document.getElementById("aiImage").style.display = "none";
+    } else {
+      document.getElementById("feedbackText").innerText = "😅 Verschillende antwoorden!";
+      document.getElementById("aiImage").src = "/" + msg.image;
+      document.getElementById("aiImage").style.display = "block";
+    }
+  } else if (msg.type === "scoreboard") {
+    document.getElementById("feedback").style.display = "none";
+    document.getElementById("waiting").style.display = "none";
+    document.getElementById("scoreboard").style.display = "";
+    const list = document.getElementById("rankingList");
+    list.innerHTML = "";
+    msg.ranking.forEach(([name, score]) => {
+      const li = document.createElement("li");
+      li.textContent = `${name} - ${score}`;
+      list.appendChild(li);
+    });
   }
-
-  if (msg.type === "start_question") {
-    if (!name) return;
-    currentQuestion = msg.question;
-    questionText.textContent = currentQuestion;
-    voteButtons.style.display = "block";
-    feedbackEl.textContent = "";
-    showTimer(12);
-  }
-
-  if (msg.type === "match_result") {
-    if (!name || !msg.votes) return;
-    const vote = msg.votes[name];
-    const same = vote === msg.winner;
-    questionText.textContent = msg.winner;
-    feedbackEl.textContent = same
-      ? "Yes! Je voelt dit koppel perfect aan."
-      : "Oeps, Stefanie en Mathieu denken er precies anders over ;)";
-  }
-
-  if (msg.type === "audience_result") {
-    if (!name || !msg.votes) return;
-    const vote = msg.votes[name];
-    const stef = Object.values(msg.votes).filter(v => v === "Stefanie").length;
-    const math = Object.values(msg.votes).filter(v => v === "Mathieu").length;
-    const same = vote && vote === (stef > math ? "Stefanie" : "Mathieu");
-    questionText.textContent = stef > math ? "Stefanie" : "Mathieu";
-    feedbackEl.textContent = same
-      ? "Yes! Je voelt dit koppel perfect aan. 🥰"
-      : "Oeps, Stefanie en Mathieu denken er precies anders over. 🤭";
-  }
-
-  if (msg.type === "mismatch") {
-    feedbackEl.textContent = "Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dan gebeuren er rare dingen, kijk maar mee op het grote scherm 🙈";
-  }
-});
+};

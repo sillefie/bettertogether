@@ -8,6 +8,77 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta property="og:url" content="https://www.wearebettertogether.be/"/>
     <meta property="og:site_name" content="Better Together"/>
+    <style>
+        @font-face {
+        font-family: 'Bergamo';
+        font-style: normal;
+        font-weight: 400;
+        src: url('https://www.wearebettertogether.be/wp-content/uploads/Bergamo/bergamostd-regular-webfont.woff') format('woff'), url('https://www.wearebettertogether.be/wp-content/uploads/Bergamo/bergamostd-regular-webfont.woff2') format('woff2');
+        }
+        @font-face {
+        font-family: 'AkzidenzGrotesk';
+        font-style: normal;
+        font-weight: 300;
+        src: url('https://www.wearebettertogether.be/wp-content/uploads/AkzidenzGrotesk-Light/AkzidenzGrotesk-Light.woff') format('woff'), url('https://www.wearebettertogether.be/wp-content/uploads/AkzidenzGrotesk-Light/AkzidenzGrotesk-Light.woff') format('woff2');
+        }
+       /* @font-face {
+        font-family: 'TeX-Gyre-Heros-regular';
+        font-style: normal;
+        font-weight: 400;
+        src: url('https://www.wearebettertogether.be/wp-content/uploads/typolab-fonts/TeX-Gyre-Heros/texgyreheros_regular_macroman/texgyreheros-regular-webfont.woff') format('woff'), url('https://www.wearebettertogether.be/wp-content/uploads/typolab-fonts/TeX-Gyre-Heros/texgyreheros_regular_macroman/texgyreheros-regular-webfont.woff') format('woff2');
+        } */
+    img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }
+    .wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+    html *, p, span, div {
+        font-family: 'AkzidenzGrotesk',Arial,sans-serif;
+        line-height:150%;
+        letter-spacing: 1px;
+    }
+    b, strong {
+        font-family: 'AkzidenzGrotesk' !important;
+    }
+    h2 {
+        font-family: 'Bergamo';
+        font-style: normal;
+        font-weight: 400;
+    }
+    body {
+        color: inherit;
+    }
+    .rechts, .rechts * {text-align:left;}
+    header {padding-bottom: 40px !important;padding-top: 40px !important;}
+    .wpb_wrapper .laborator-btn {margin-bottom: 0px;}
+    .wpb_button, .wpb_content_element, ul.wpb_thumbnails-fluid>li {margin-bottom: 0px;}
+    .section-title {margin-bottom: 0px;}
+
+    .wpb_wrapper .laborator-btn.btn-type-outlined.btn-primary {border-color: transparent;}
+    .wpb_wrapper .laborator-btn.btn-type-outlined-bg.btn-primary:hover {border-color: transparent;}
+    .btn.btn-primary:hover {background: #e5a917 !important;}
+    .wpb_wrapper .laborator-btn.btn-type-outlined.btn-secondary {border-color: transparent;color: #ffffff;}
+    .wpb_wrapper .laborator-btn.btn-type-outlined {background-color:#e4a499;border: 0px solid transparent;}
+    .wpb_wrapper .laborator-btn.btn-type-outlined-bg.btn-secondary:hover {background-color: #e5a917;border-color: transparent;color: #fff;}
+    .menu li a:hover, .menu li.current-menu-item a {color: #e4a499 !important;}
+    .main-header.menu-type-standard-menu .standard-menu-container.menu-skin-main div.menu > ul > li > a:after, .main-header.menu-type-standard-menu .standard-menu-container.menu-skin-main ul.menu > li > a:after {background-color: #e4a499;}
+    @media only screen and (max-width: 800px) {
+    .gastlinks {float: none;width: 100%;margin-right: 0;}
+    .gastlinks {float: none;width: 100%;margin-left: 0;}
+    }
+    .single-post .comment-form > p.comment-form-cookies-consent input[type=checkbox]:before, input[type=checkbox]:before, input[type=radio]:before {
+        background-color: #e5a917;
+    }
+    input[type="checkbox"], input[type="radio"] {
+        border: 1px solid #e5a917;
+    }
+    .rsvpFormField {
+        margin: 20px 0 10px 0px;
+    }
+    input[type="checkbox"], input[type="radio"] {
+        margin-left: 6px;}
+    h2 {color: #e5a917;}input[type="text"], input[type="number"], input[type="email"], input[type="password"], input[type="number"], input[type="url"], input[type="tel"], textarea {    font-size: 13px !important;}@media screen and (max-width: 768px) {.header-logo.logo-image img {width: 80%; max-width: 80%;}.page-id-135 .wpb_single_image {display:none;} h2 {font-size: 20px;}.gastrechts {float: none;width: 100%;margin-left: 0;margin-top: 40px;}}
+    .header-logo.logo-image {width: 432px;height: 188px;}
+    @media screen and (min-width:770px) { .mobile-menu-wrapper,.mobile-menu-overlay,.standard-menu-container .menu-bar-hidden-desktop {display: none;} }
+    @media screen and (max-width:769px) { .header-logo.logo-image {width: 380px ;height: 165.37037037037px ;} }
+    </style>
     <link rel="stylesheet" id="bootstrap-css" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/bootstrap.css" media="all" />
     <link rel="stylesheet" id="main-css" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/main.css?ver=2.9.4" media="all" />
     <link rel="stylesheet" id="custom-skin-css" href="https://www.wearebettertogether.be/wp-content/themes/kalium-child/custom-skin.css?ver=8df36434c72d4571e697b3dd04a5786d" media="all" />
@@ -23,68 +94,41 @@
         <header class="main-header">
             <img itemprop="logo" src="/img/logo.png" width="432" height="188" class="main-logo" alt="Better Together" />
         </header>
-        <main id="container">
-            <section id="start-screen" class="screen active">
-              <p>Welkom! We starten zo meteen.</p>
-            </section>
+        <div id="container">
+            <div id="screen_start" class="screen">
+                <h1></h1>
+                <p>We starten zo meteen...</p>
+            </div>
 
-            <section id="intro-screen" class="screen hidden">
-              <audio id="intro-audio" src="audio/intro.mp3" autoplay></audio>
-            </section>
+            <div id="screen_intro" class="screen" style="display:none">
+                <h1>Intro</h1>
+                <p>Bruidspaar komt naar voren.</p>
+            </div>
 
-            <section id="rules-screen" class="screen hidden">
-              <audio id="rules-audio" src="audio/rules.mp3" autoplay></audio>
-              <p>Even luisteren naar de spelregels...</p>
-            </section>
+          <div id="screen_uitleg" class="screen" style="display:none">
+            <h2>Spelregels</h2>
+            <p>Luister naar de uitlegstem.</p>
+          </div>
 
-            <section id="qr-screen" class="screen hidden">
-              <h1>Speel mee!</h1>
-              <p>Scan de code en geef je naam in op je smartphone</p>
-              <img src="img/qr.png" alt="QR-code" class="qr-img" />
-            </section>
+          <div id="screen_vote" class="screen" style="display:none">
+            <h2 id="question_text">Vraag komt hier</h2>
+            <p>Stem nu met je smartphone en toon je schoenen!</p>
+          </div>
 
-            <section id="question-screen" class="screen hidden">
-              <h1 id="question-text"></h1>
-              <div id="timer" class="timer"></div>
-            </section>
+          <div id="screen_feedback" class="screen" style="display:none">
+            <h2 id="feedback">Antwoord</h2>
+            <img id="ai_img" style="max-width:400px;display:none">
+            <h3>Stemmen</h3>
+            <ul id="live_votes"></ul>
+          </div>
 
-            <section id="match-screen" class="screen hidden">
-              <h1 id="match-name"></h1>
-              <div id="match-feedback" class="feedback green"></div>
-            </section>
+          <div id="screen_scoreboard" class="screen" style="display:none">
+            <h2>Top 10</h2>
+            <ol id="ranking"></ol>
+          </div>
 
-            <section id="audience-result-screen" class="screen hidden">
-              <h1 id="audience-winner"></h1>
-              <div class="bars">
-                <div class="bar-container">
-                  <span>Stefanie</span>
-                  <div class="bar" id="bar-stefanie"></div>
-                </div>
-                <div class="bar-container">
-                  <span>Mathieu</span>
-                  <div class="bar" id="bar-mathieu"></div>
-                </div>
-              </div>
-              <div id="audience-feedback" class="feedback"></div>
-            </section>
-
-            <section id="mismatch-screen" class="screen hidden">
-              <div class="feedback red" id="mismatch-text"></div>
-            </section>
-
-            <section id="ai-image-screen" class="screen hidden">
-              <img id="ai-image" src="" alt="AI-foto" class="ai-fullscreen" />
-            </section>
-
-            <section id="ai-after-screen" class="screen hidden">
-              <div class="feedback red" id="ai-after-text"></div>
-            </section>
-
-            <section id="no-more-images" class="screen hidden">
-              <div class="feedback" id="no-more-text"></div>
-            </section>
-        </main>
+            <script src="/js/screen_display.js"></script>
+        </div>
     </div>
-  <script src="js/screen_display.js"></script>
 </body>
 </html>
