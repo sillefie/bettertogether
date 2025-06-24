@@ -1,6 +1,6 @@
 const socket = new WebSocket(`wss://${location.host}/ws/public`);
-const introAudio = new Audio("/audio/intro.mp3");
-const rulesAudio = new Audio("/audio/rules.mp3");
+const introAudio = document.getElementById("my-audio");
+const rulesAudio = document.getElementById("my-video");
 
 window.addEventListener("load", () => {
   introAudio.play().then(() => {
@@ -22,11 +22,15 @@ socket.onmessage = (event) => {
       showScreen(data.screen);
 
       if (data.screen === "intro") {
-        introAudio.play();
+        introAudio.play().catch(() => {
+          console.warn("Autoplay geblokkeerd");
+        });
       }
 
       if (data.screen === "spelregels") {
-        rulesAudio.play();
+        rulesAudio.play().catch(() => {
+          console.warn("Autoplay geblokkeerd");
+        });
       }
     }
 
