@@ -1,59 +1,97 @@
-let ws = new WebSocket("wss://" + location.host + "/ws/public");
+const socket = new WebSocket(`ws://${location.host}/ws/public`);
 
-let currentScreen = "intro";
+const questionText = document.getElementById("question-text");
+const timerEl = document.getElementById("timer");
+const voteFeedback = document.getElementById("vote-feedback");
+const nameInput = document.getElementById("name-input");
+const startButton = document.getElementById("start-button");
+const voteButtons = document.getElementById("vote-buttons");
+const stefanieBtn = document.getElementById("vote-stefanie");
+const mathieuBtn = document.getElementById("vote-mathieu");
 
-function register() {
-  const name = document.getElementById("nameInput").value;
-  ws.send(JSON.stringify({ type: "register", name: name }));
-  document.getElementById("intro").style.display = "none";
-  currentScreen = "waiting";
+let name = "";
+let currentScreen = "";
+
+function showTimer(seconds) {
+  let remaining = seconds;
+  timerEl.textContent = `${remaining}s`;
+  timerEl.style.display = "block";
+  const interval = setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(interval);
+      timerEl.style.display = "none";
+    } else {
+      timerEl.textContent = `${remaining}s`;
+    }
+  }, 1000);
 }
 
-function vote(v) {
-  ws.send(JSON.stringify({ vote: v }));
-  document.getElementById("question").style.display = "none";
-  document.getElementById("waiting").style.display = "";
-}
+socket.addEventListener("open", () => {
+  console.log("Verbonden met server");
+});
 
-ws.onmessage = (event) => {
+socket.addEventListener("message", (event) => {
   const msg = JSON.parse(event.data);
+
   if (msg.type === "screen") {
-    if (msg.screen === "question") {
-      document.getElementById("question").style.display = "";
-      document.getElementById("waiting").style.display = "none";
-      document.getElementById("feedback").style.display = "none";
-      document.getElementById("scoreboard").style.display = "none";
-    } else {
-      document.getElementById("question").style.display = "none";
-    }
-  } else if (msg.type === "question") {
-    document.getElementById("questionText").innerText = msg.text;
-    document.getElementById("question").style.display = "";
-    document.getElementById("waiting").style.display = "none";
-    document.getElementById("feedback").style.display = "none";
-    document.getElementById("scoreboard").style.display = "none";
-  } else if (msg.type === "feedback") {
-    document.getElementById("question").style.display = "none";
-    document.getElementById("waiting").style.display = "none";
-    document.getElementById("feedback").style.display = "";
-    if (msg.result === "correct") {
-      document.getElementById("feedbackText").innerText = "ðŸŽ‰ Jullie antwoorden kwamen overeen!";
-      document.getElementById("aiImage").style.display = "none";
-    } else {
-      document.getElementById("feedbackText").innerText = "ðŸ˜… Verschillende antwoorden!";
-      document.getElementById("aiImage").src = "/" + msg.image;
-      document.getElementById("aiImage").style.display = "block";
-    }
-  } else if (msg.type === "scoreboard") {
-    document.getElementById("feedback").style.display = "none";
-    document.getElementById("waiting").style.display = "none";
-    document.getElementById("scoreboard").style.display = "";
-    const list = document.getElementById("rankingList");
-    list.innerHTML = "";
-    msg.ranking.forEach(([name, score]) => {
-      const li = document.createElement("li");
-      li.textContent = `${name} - ${score}`;
-      list.appendChild(li);
-    });
+    currentScreen = msg.screen;
+    updateScreen(msg.screen);
   }
-};
+
+  if (msg.type === "question") {
+    questionText.textContent = msg.text;
+    voteFeedback.textContent = "";
+    voteButtons.style.display = "flex";
+    showTimer(12);
+  }
+
+  if (msg.type === "match_result") {
+    voteButtons.style.display = "none";
+    questionText.textContent = msg.name;
+    if (msg.correct) {
+      voteFeedback.textContent = "Yes! Je voelt dit koppel perfect aan.";
+    } else {
+      voteFeedback.textContent = "Oeps, Stefanie en Mathieu denken er precies anders over.";
+    }
+  }
+
+  if (msg.type === "mismatch_warning") {
+    voteButtons.style.display = "none";
+    voteFeedback.textContent = "Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dan gebeuren er rare dingen, kijk maar mee op het grote scherm";
+  }
+});
+
+function updateScreen(screen) {
+  if (["start", "intro", "rules", "qr"].includes(screen)) {
+    voteFeedback.textContent = "";
+    voteButtons.style.display = "none";
+    questionText.textContent = "Welkom! We starten zo meteen.";
+  }
+}
+
+startButton.addEventListener("click", () => {
+  const val = nameInput.value.trim();
+  if (val !== "") {
+    name = val;
+    nameInput.style.display = "none";
+    startButton.style.display = "none";
+    socket.send(JSON.stringify({ type: "register", name }));
+  }
+});
+
+stefanieBtn.addEventListener("click", () => {
+  if (name !== "") {
+    socket.send(JSON.stringify({ vote: "Stefanie" }));
+    voteButtons.style.display = "none";
+    voteFeedback.textContent = "Wachten op de resultaten...";
+  }
+});
+
+mathieuBtn.addEventListener("click", () => {
+  if (name !== "") {
+    socket.send(JSON.stringify({ vote: "Mathieu" }));
+    voteButtons.style.display = "none";
+    voteFeedback.textContent = "Wachten op de resultaten...";
+  }
+});

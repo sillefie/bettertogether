@@ -1,87 +1,318 @@
-/* -------------------------------------------------
-   Kleuren Better Together
-   geel  = #e5a917  | roze = #e4a499
---------------------------------------------------*/
-:root{
-  --bt-yellow:#e5a917;
-  --bt-pink:#e4a499;
+/* ===== Variabelen Better Together ===== */
+:root {
+  --bt-yellow: #e5a917;
+  --bt-pink: #e4a499;
 }
 
-@font-face {
-font-family: 'Bergamo';
-font-style: normal;
-font-weight: 400;
-src: url('Bergamo/bergamostd-regular-webfont.woff') format('woff'), url('Bergamo/bergamostd-regular-webfont.woff2') format('woff2');
+/* ===== Algemeen ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-@font-face {
-font-family: 'AkzidenzGrotesk';
-font-style: normal;
-font-weight: 300;
-src: url('AkzidenzGrotesk/AkzidenzGrotesk-Light.woff') format('woff');
+body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'AkzidenzGrotesk', Arial, sans-serif;
+  background: #fff;
+  color: #111;
+  text-align: center;
 }
-/* @font-face {
-font-family: 'TeX-Gyre-Heros-regular';
-font-style: normal;
-font-weight: 400;
-src: url('https://www.wearebettertogether.be/wp-content/uploads/typolab-fonts/TeX-Gyre-Heros/texgyreheros_regular_macroman/texgyreheros-regular-webfont.woff') format('woff'), url('https://www.wearebettertogether.be/wp-content/uploads/typolab-fonts/TeX-Gyre-Heros/texgyreheros_regular_macroman/texgyreheros-regular-webfont.woff') format('woff2');
-} */
-.wrapper {
-    position: relative;
-    z-index: 100;
-    -webkit-transition: -webkit-transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
-    transition: -webkit-transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
-    transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
-    transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95), -webkit-transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+.hidden {
+  display: none;
+}
+.logo {
+  max-width: 280px;
+  margin: 24px auto;
+  display: block;
+}
+header {
+  padding: 40px 0;
+}
+h1 {
+  color: var(--bt-yellow);
+}
+h2 {
+  font-family: 'Bergamo';
+  font-weight: 400;
+  color: var(--bt-yellow);
+}
+p,
+span,
+div {
+  line-height: 150%;
+  letter-spacing: 1px;
+}
+strong,
+b {
+  font-family: 'AkzidenzGrotesk' !important;
+}
+.rechts,
+.rechts * {
+  text-align: left;
 }
 
-/* Bootstrap overrides */
-body {width: 100%; min-height: 100vh;}
-#main-wrapper {display: flex; flex-direction: column; align-items: center; justify-content: center; top: 100px;}
-header, #container {text-align: center;}
-h1 {font-family: 'Bergamo'; color: var(--bt-yellow);font-size:3.5em; margin: 60px 0px;}
-p {font-size:2em;}
-.btn-primary{
-  background:var(--bt-yellow);
-  border-color:var(--bt-yellow);
+/* ===== Fonts ===== */
+@font-face {
+  font-family: 'Bergamo';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://www.wearebettertogether.be/wp-content/uploads/Bergamo/bergamostd-regular-webfont.woff') format('woff'),
+       url('https://www.wearebettertogether.be/wp-content/uploads/Bergamo/bergamostd-regular-webfont.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AkzidenzGrotesk';
+  font-style: normal;
+  font-weight: 300;
+  src: url('https://www.wearebettertogether.be/wp-content/uploads/AkzidenzGrotesk-Light/AkzidenzGrotesk-Light.woff') format('woff'),
+       url('https://www.wearebettertogether.be/wp-content/uploads/AkzidenzGrotesk-Light/AkzidenzGrotesk-Light.woff2') format('woff2');
+}
+
+/* ===== Buttons en Inputs ===== */
+button,
+select {
+  padding: 8px 16px;
+  margin: 4px;
+  font-size: 1rem;
+  border: 1px solid #888;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+  background: #eee;
+}
+.btn-primary {
+  background: var(--bt-yellow);
+  border-color: var(--bt-yellow);
+}
+.btn-success {
+  background: #79c69f;
+  border-color: #79c69f;
+}
+.btn-info {
+  background: #7ab6ff;
+  border-color: #7ab6ff;
 }
 .btn-primary:hover,
 .btn-success:hover,
-.btn-info:hover{
-  background:var(--bt-pink);
-  border-color:var(--bt-pink);
+.btn-info:hover {
+  background: var(--bt-pink);
+  border-color: var(--bt-pink);
 }
-.btn-success{background:#79c69f;border-color:#79c69f;}
-.btn-info   {background:#7ab6ff;border-color:#7ab6ff;}
-
-input.form-control{
-  border:2px solid var(--bt-pink);
-  border-radius:8px;
-}
-
-/* Timer */
-#timer{
-  font-size:3rem;
-  font-weight:bold;
-  color:var(--bt-yellow);
+input.form-control,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="tel"],
+textarea {
+  border: 2px solid var(--bt-pink);
+  border-radius: 8px;
+  font-size: 13px !important;
 }
 
-/* QR-code & AI-foto randen */
+/* ===== Stemscherm (public) ===== */
+#vote-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+#vote-buttons button {
+  font-size: 1.4rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#vote-stefanie {
+  background: #f5b6d4;
+  color: #000;
+}
+#vote-mathieu {
+  background: #b6d4f5;
+  color: #000;
+}
+#vote-feedback {
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+/* ===== Timer ===== */
+#timer,
+.timer {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--bt-yellow);
+  margin: 16px;
+}
+
+/* ===== Feedback (match/mismatch) ===== */
+.feedback {
+  padding: 12px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  border-radius: 12px;
+  margin: 16px auto;
+  max-width: 80%;
+}
+.feedback.green {
+  background: #c3eecb;
+  color: #064d1f;
+}
+.feedback.red {
+  background: #f3c6c6;
+  color: #640000;
+}
+
+/* ===== Display: stembalken ===== */
+#bar-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 16px;
+  height: 200px;
+  width: 100%;
+  margin-top: 24px;
+}
+.bar {
+  width: 120px;
+  background-color: #ddd;
+  border-radius: 8px 8px 0 0;
+  transition: height 0.5s;
+}
+#bar-stefanie {
+  background-color: #f5b6d4;
+}
+#bar-mathieu {
+  background-color: #b6d4f5;
+}
+.bars span {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+/* ===== QR-code & AI-foto ===== */
+.qr-img,
 #qrScreen img,
-#feedbackScreen img{
-  border:5px solid var(--bt-pink);
-  border-radius:12px;
+#feedbackScreen img {
+  max-width: 300px;
+  margin: 16px auto;
+  border: 5px solid var(--bt-pink);
+  border-radius: 12px;
+}
+.ai-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 10;
+  background-color: #000;
 }
 
-#scoreboard li{
-  background:#fff;
-  border-left:6px solid var(--bt-yellow);
-  border-radius:4px;
-  margin:0.4em 0;
-  padding:0.4em 1em;
+/* ===== Admin-schermen ===== */
+main section {
+  margin: 24px auto;
+  max-width: 720px;
+}
+section h2 {
+  margin-bottom: 8px;
+}
+pre,
+ul {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  overflow: auto;
+}
+.screen {
+  display: none;
+  padding: 24px;
+}
+.screen.active {
+  display: block;
+}
+#main-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 100px;
+}
+#display-title {
+  font-size: 2.4rem;
+  margin: 24px 0;
+}
+#display-message {
+  font-size: 1.6rem;
+  margin: 16px auto;
+  max-width: 80%;
 }
 
-/* Mobiel */
-@media(max-width:600px){
-  #timer{font-size:2rem;}
-  input,button{width:90%;}
+/* ===== Admin kleurcodes knoppen ===== */
+button[data-cmd="set_screen"] {
+  background: #d1e7ff;
+}
+button[data-cmd="same_answer"] {
+  background: #c3eecb;
+}
+#btn-different,
+#btn-show-image,
+#btn-repeat-image,
+#btn-hide-image {
+  background: #f3c6c6;
+}
+#btn-audience-result {
+  background: #ffe5b4;
+}
+
+/* ===== Scoreboard ===== */
+#scoreboard li {
+  background: #fff;
+  border-left: 6px solid var(--bt-yellow);
+  border-radius: 4px;
+  margin: 0.4em 0;
+  padding: 0.4em 1em;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  #timer {
+    font-size: 2rem;
+  }
+  input,
+  button {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .header-logo.logo-image img {
+    width: 80%;
+    max-width: 80%;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  .gastrechts {
+    float: none;
+    width: 100%;
+    margin-left: 0;
+    margin-top: 40px;
+  }
+}
+@media screen and (min-width: 770px) {
+  .mobile-menu-wrapper,
+  .mobile-menu-overlay,
+  .standard-menu-container .menu-bar-hidden-desktop {
+    display: none;
+  }
+}
+@media screen and (max-width: 769px) {
+  .header-logo.logo-image {
+    width: 380px;
+    height: 165.37px;
+  }
 }

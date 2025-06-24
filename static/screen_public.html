@@ -1,43 +1,37 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>BetterTogether - Publiek</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="utf-8" />
+  <title>BetterTogether – Publiek</title>
+
+  <!-- Bestaande stylesheet (NIET wijzigen) -->
+  <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" id="bootstrap-css" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/bootstrap.css" media="all" />
+    <link rel="stylesheet" id="main-css" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/main.css?ver=2.9.4" media="all" />
+    <link rel="stylesheet" id="custom-skin-css" href="https://www.wearebettertogether.be/wp-content/themes/kalium-child/custom-skin.css?ver=8df36434c72d4571e697b3dd04a5786d" media="all" />
+    <link rel="stylesheet" id="typolab-cdfb6c0dff059219553bb2654f04ea68-css" href="https://www.wearebettertogether.be/wp-content/uploads/typolab-fonts/fonts-fba2022537a6a8ebdb8e5920b922e749.css?ver=c497fb9de6821e42e3473aabf18fc70b" media="all" />
+    <link rel="stylesheet" id="js_composer_front-css" href="https://www.wearebettertogether.be/wp-content/plugins/js_composer/assets/css/js_composer.min.css?ver=8.2" media="all" />
+    <link rel="stylesheet" id="popup-maker-site-css" href="//www.wearebettertogether.be/wp-content/uploads/pum/pum-site-styles.css?generated=1739719724&#038;ver=1.20.4" media="all" />
+    <link rel="stylesheet" id="kalium-child-css" href="https://www.wearebettertogether.be/wp-content/themes/kalium-child/style.css?ver=6.7.2" media="all" />
+    <link rel="stylesheet" id="style-css-override" href="css/style.css" media="all" />
+    <script>var mobile_menu_breakpoint = 769;</script>
 </head>
+
 <body>
-  <div id="intro">
-    <h1>Welkom!</h1>
-    <p>We starten zo meteen.</p>
-    <input id="nameInput" placeholder="Jouw naam">
-    <button onclick="register()">Start</button>
-  </div>
-
-  <div id="question" style="display:none">
-    <h2 id="questionText"></h2>
-    <div id="voteButtons" style="display:none">
-      <button onclick="vote('Stefanie')">👰 Stefanie</button>
-      <button onclick="vote('Mathieu')">🤵 Mathieu</button>
+  <div class="container">
+    <img src="/img/logo.png" alt="logo" class="logo">
+    <h1 id="question-text">Welkom! We starten zo meteen.</h1>
+    <div id="name-form">
+      <input type="text" id="name-input" placeholder="Jouw naam">
+      <button id="start-button">Start</button>
     </div>
-    <div id="timer" style="font-size: 48px; margin-top: 20px;">00:12</div>
+    <div id="timer" style="display:none;"></div>
+    <div id="vote-buttons" style="display:none;">
+      <button id="vote-stefanie">👰 Stefanie</button>
+      <button id="vote-mathieu">🤵 Mathieu</button>
+    </div>
+    <div id="vote-feedback" class="feedback"></div>
   </div>
-
-  <div id="waiting" style="display:none">
-    <h2>Bedankt om te stemmen!</h2>
-    <p>Wacht op het resultaat...</p>
-  </div>
-
-  <div id="feedback" style="display:none">
-    <h2 id="feedbackText"></h2>
-    <img id="aiImage" style="max-width:300px;display:none">
-  </div>
-
-  <div id="scoreboard" style="display:none">
-    <h2>Top 10</h2>
-    <ol id="rankingList"></ol>
-  </div>
-
   <script src="/js/screen_public.js"></script>
 </body>
 </html>
