@@ -134,3 +134,9 @@ async def websocket_admin(ws: WebSocket):
                 await broadcast(public_clients.values(), {"type": "scoreboard", "ranking": top10})
     except WebSocketDisconnect:
         admin_clients.remove(ws)
+
+@app.websocket("/ws/testcheck")
+async def testcheck(ws: WebSocket):
+    await ws.accept()
+    await ws.send_json({"type": "repeat_ai"})
+    await ws.send_json({"type": "no_more_images"})
