@@ -14,3 +14,7 @@ def load_state():
             return json.loads(content)
     except json.JSONDecodeError:
         return {}
+
+def save_state(data: dict):
+    with open(STATE_FILE, "w") as f:
+        json.dump(data, f)
