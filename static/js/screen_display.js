@@ -27,17 +27,37 @@ socket.onmessage = (event) => {
 
     if (data.type === "feedback") {
         const feedback = document.getElementById("feedback");
+        const answerStem = document.getElementById("answerStem");
+        const answerCrowd = document.getElementById("answerCrowd");
         const img = document.getElementById("ai_img");
         const voteList = document.getElementById("live_votes");
-
+        
         if (data.result === "correct") {
-            feedback.textContent = "âœ“ Jullie antwoordden hetzelfde!";
+            answerStem.textContent = "âœ“ Jeeej! Stefanie en Mathieu dachten er hetzelfde over! Dat verdient een pakske!";
             feedback.style.color = "green";
             img.style.display = "none";
         } else {
-            feedback.textContent = "ðŸ˜… Verschillende antwoorden!";
+            feedback.textContent = "ðŸ˜… Oh nee … Stefanie &amp; Mathieu hebben niet hetzelfde geantwoord ?… dat kunnen we wel niet zo laten …!";
             img.src = "/" + data.image;
             img.style.display = "block";
+        }
+        if (data.result === "crowdsame") {
+            if (data.result === "over20") {
+                answerCrowd.textContent = "Amaai, iedereen hier kent jullie door en door ?.";
+            } else {
+                answerCrowd.textContent = "Iedereen denkt er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ?";
+            }
+                feedback.style.color = "black";
+                img.style.display = "none";
+        }
+        if (data.result === "crowddiff") {
+            if (data.result === "over20") {
+                answerCrowd.textContent = "Eeeeeuhm, iedereen denkt er precies wel anders over ?.";
+            } else {
+                answerCrowd.textContent = "Iedereen denkt er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ?";
+            }
+                feedback.style.color = "black";
+                img.style.display = "none";
         }
 
         voteList.innerHTML = "";

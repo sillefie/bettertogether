@@ -43,15 +43,14 @@ ws.onmessage = (event) => {
   } else if (msg.type === "feedback") {
     document.getElementById("question").style.display = "none";
     document.getElementById("waiting").style.display = "none";
-      document.getElementById("intro").style.display = "none";
+    document.getElementById("intro").style.display = "none";
     document.getElementById("feedback").style.display = "";
     if (msg.result === "correct") {
-      document.getElementById("feedbackText").innerText = "🎉 Jullie antwoorden kwamen overeen!";
-      document.getElementById("aiImage").style.display = "none";
+      document.getElementById("answerCorrect").style.display = "";
+      document.getElementById("answerFault").style.display = "none";
     } else {
-      document.getElementById("feedbackText").innerText = "😅 Verschillende antwoorden!";
-      document.getElementById("aiImage").src = "/" + msg.image;
-      document.getElementById("aiImage").style.display = "block";
+      document.getElementById("answerCorrect").style.display = "none";
+      document.getElementById("answerFault").style.display = "";
     }
   } else if (msg.type === "scoreboard") {
       document.getElementById("intro").style.display = "none";
