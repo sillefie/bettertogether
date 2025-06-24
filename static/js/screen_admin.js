@@ -38,3 +38,16 @@ function confirmDifferent() {
 function endQuiz() {
     socket.send(JSON.stringify({ command: "end_quiz" }));
 }
+
+
+function showNewAI() {
+    socket.send(JSON.stringify({ command: "show_new_ai" }));
+}
+
+function showRepeatAI() {
+    socket.send(JSON.stringify({ command: "repeat_ai" }));
+}
+
+function hideAI() {
+    socket.send(JSON.stringify({ command: "hide_ai" }));
+}

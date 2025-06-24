@@ -139,5 +139,30 @@ document.addEventListener('keydown', async (e) => {
   }
 });
 </script>
+<script>
+socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.type === "screen") {
+        document.querySelectorAll(".screen").forEach(s => s.style.display = "none");
+
+        if (data.screen === "intro") {
+            document.getElementById("screen_intro").style.display = "block";
+            const audio = document.getElementById("my-audio");
+            audio.currentTime = 0;
+            audio.play().catch(err => console.warn("Audio error:", err));
+        }
+
+        if (data.screen === "uitleg") {
+            document.getElementById("screen_uitleg").style.display = "block";
+            const video = document.getElementById("my-video");
+            video.style.display = "block";
+            video.currentTime = 0;
+            video.play().then(() => {
+                if (video.requestFullscreen) video.requestFullscreen();
+            }).catch(err => console.warn("Video error:", err));
+        }
+    }
+};
+</script>
 </body>
 </html>
