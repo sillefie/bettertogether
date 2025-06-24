@@ -120,6 +120,16 @@ async def get_results():
     summary = get_vote_summary()
     return summary
 
+
+
+@app.get("/ai-image")
+async def get_ai_image():
+    path = get_next_ai_image()
+    if path:
+        return {"image": f"/img/{path}"}
+    else:
+        return {"image": None}
+
 @app.websocket("/ws/admin")
 async def websocket_admin(ws: WebSocket):
     await ws.accept()

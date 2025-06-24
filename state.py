@@ -68,3 +68,23 @@ def reset_votes():
     state = load_state()
     state["votes"] = {}
     save_state(state)
+
+
+
+import random
+
+def get_next_ai_image():
+    state = load_state()
+    all_images = ["ai1.jpg", "ai2.jpg", "ai3.jpg", "ai4.jpg", "ai5.jpg"]
+    unused = [img for img in all_images if img not in state["used_ai"]]
+    if not unused:
+        return None  # alles gebruikt
+    next_img = random.choice(unused)
+    state["used_ai"].append(next_img)
+    save_state(state)
+    return next_img
+
+def reset_ai_images():
+    state = load_state()
+    state["used_ai"] = []
+    save_state(state)
