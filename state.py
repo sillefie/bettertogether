@@ -33,3 +33,38 @@ def save_state(state):
     }
     with open(STATE_FILE, "w") as f:
         json.dump(data, f)
+
+
+
+def add_vote(player_name, choice):
+    state = load_state()
+    if player_name not in state["players"]:
+        return False  # speler moet eerst geregistreerd zijn
+    state["votes"][player_name] = choice
+    save_state(state)
+    return True
+
+def get_vote_summary():
+    state = load_state()
+    votes = state["votes"].values()
+    tally = {"Stefanie": 0, "Mathieu": 0}
+    for vote in votes:
+        if vote in tally:
+            tally[vote] += 1
+    difference = abs(tally["Stefanie"] - tally["Mathieu"])
+    if tally["Stefanie"] > tally["Mathieu"]:
+        majority = "Stefanie"
+    elif tally["Mathieu"] > tally["Stefanie"]:
+        majority = "Mathieu"
+    else:
+        majority = "equal"
+    return {
+        "tally": tally,
+        "difference": difference,
+        "majority": majority
+    }
+
+def reset_votes():
+    state = load_state()
+    state["votes"] = {}
+    save_state(state)

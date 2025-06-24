@@ -6,6 +6,49 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+
+<div id="vote-screen" class="screen" style="display: none;">
+    <h1 id="question-text">Wie is het meest romantisch?</h1>
+    <button onclick="submitVote('Stefanie')">👰 Stefanie</button>
+    <button onclick="submitVote('Mathieu')">🤵 Mathieu</button>
+    <p id="vote-timer">12</p>
+</div>
+
+<div id="vote-feedback" class="screen" style="display: none;">
+    <h1 id="vote-feedback-text"></h1>
+</div>
+
+<script>
+let playerName = localStorage.getItem("playerName") || "";
+let playerChoice = "";
+
+function submitVote(choice) {
+    if (!playerName) {
+        alert("Gelieve eerst je naam in te vullen.");
+        return;
+    }
+    playerChoice = choice;
+    fetch("/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: playerName, choice: choice })
+    }).then(() => {
+        document.getElementById("vote-screen").style.display = "none";
+        document.getElementById("vote-feedback").style.display = "block";
+        fetch("/results").then(res => res.json()).then(data => {
+            const winner = data.majority;
+            let feedback = "";
+            if (winner === choice) {
+                feedback = "Yes! Je voelt dit koppel perfect aan. 🥰";
+            } else {
+                feedback = "Oeps, Stefanie en Mathieu denken er precies anders over. 🤭";
+            }
+            document.getElementById("vote-feedback-text").innerText = feedback;
+        });
+    });
+}
+</script>
+
   <div id="intro">
     <h1>Welkom!</h1>
     <p>We starten zo meteen.</p>
