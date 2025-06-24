@@ -51,7 +51,7 @@
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "screen") {
-        // eventueel visuele indicator van actief scherm
+        document.getElementById("screen_status").textContent = data.screen;
       }
       if (data.type === "votes") {
         const votes = data.votes;
@@ -74,17 +74,27 @@
       const index = select.selectedIndex;
       socket.send(JSON.stringify({ command: "set_question", idx: index }));
     }
+    function sendQuestion(index) {
+        socket.send(JSON.stringify({ command: "set_question", idx: index }));
+    }
 
-    function confirmSame() {
-      socket.send(JSON.stringify({ command: "same_answer" }));
+    /* function confirmSame() {
+        socket.send(JSON.stringify({ command: "same_answer" }));
+    }*/
+    function confirmSameStefanie() {
+      socket.send(JSON.stringify({ command: "same_answer_stefanie" }));
+    }
+
+    function confirmSameMathieu() {
+      socket.send(JSON.stringify({ command: "same_answer_mathieu" }));
     }
 
     function confirmDifferent() {
-      socket.send(JSON.stringify({ command: "different_answer" }));
+        socket.send(JSON.stringify({ command: "different_answer" }));
     }
 
     function endQuiz() {
-      socket.send(JSON.stringify({ command: "end_quiz" }));
+        socket.send(JSON.stringify({ command: "end_quiz" }));
     }
 
     window.onload = () => {
@@ -110,7 +120,6 @@
       });
     };
   </script>
-<script src="js/admin.js"></script>
     
 </body>
 </html>
