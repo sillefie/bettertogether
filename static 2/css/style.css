@@ -1,0 +1,60 @@
+/* -------------------------------------------------
+   Kleuren Better Together
+   geel  = #e5a917  | roze = #e4a499
+--------------------------------------------------*/
+:root{
+  --bt-yellow:#e5a917;
+  --bt-pink:#e4a499;
+}
+
+/* Bootstrap overrides */
+body {width: 100%; min-height: 100vh;}
+#main-wrapper {display: flex; flex-direction: column; align-items: center; justify-content: center; top: 100px;}
+header, #container {text-align: center;}
+h1 {color: var(--bt-yellow);}
+p {font-size:2em;}
+.btn-primary{
+  background:var(--bt-yellow);
+  border-color:var(--bt-yellow);
+}
+.btn-primary:hover,
+.btn-success:hover,
+.btn-info:hover{
+  background:var(--bt-pink);
+  border-color:var(--bt-pink);
+}
+.btn-success{background:#79c69f;border-color:#79c69f;}
+.btn-info   {background:#7ab6ff;border-color:#7ab6ff;}
+
+input.form-control{
+  border:2px solid var(--bt-pink);
+  border-radius:8px;
+}
+
+/* Timer */
+#timer{
+  font-size:3rem;
+  font-weight:bold;
+  color:var(--bt-yellow);
+}
+
+/* QR-code & AI-foto randen */
+#qrScreen img,
+#feedbackScreen img{
+  border:5px solid var(--bt-pink);
+  border-radius:12px;
+}
+
+#scoreboard li{
+  background:#fff;
+  border-left:6px solid var(--bt-yellow);
+  border-radius:4px;
+  margin:0.4em 0;
+  padding:0.4em 1em;
+}
+
+/* Mobiel */
+@media(max-width:600px){
+  #timer{font-size:2rem;}
+  input,button{width:90%;}
+}
