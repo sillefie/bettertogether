@@ -26,6 +26,7 @@ ws.onmessage = (event) => {
   if (msg.type === "screen") {
     if (msg.screen === "question") {
       document.getElementById("question").style.display = "";
+      document.getElementById("intro").style.display = "none";
       document.getElementById("waiting").style.display = "none";
       document.getElementById("feedback").style.display = "none";
       document.getElementById("scoreboard").style.display = "none";
@@ -38,9 +39,11 @@ ws.onmessage = (event) => {
     document.getElementById("waiting").style.display = "none";
     document.getElementById("feedback").style.display = "none";
     document.getElementById("scoreboard").style.display = "none";
+      document.getElementById("intro").style.display = "none";
   } else if (msg.type === "feedback") {
     document.getElementById("question").style.display = "none";
     document.getElementById("waiting").style.display = "none";
+      document.getElementById("intro").style.display = "none";
     document.getElementById("feedback").style.display = "";
     if (msg.result === "correct") {
       document.getElementById("feedbackText").innerText = "🎉 Jullie antwoorden kwamen overeen!";
@@ -51,6 +54,7 @@ ws.onmessage = (event) => {
       document.getElementById("aiImage").style.display = "block";
     }
   } else if (msg.type === "scoreboard") {
+      document.getElementById("intro").style.display = "none";
     document.getElementById("feedback").style.display = "none";
     document.getElementById("waiting").style.display = "none";
     document.getElementById("scoreboard").style.display = "";

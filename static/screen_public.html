@@ -1,41 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl-NL">
 <head>
-  <meta charset="UTF-8">
-  <title>BetterTogether - Publiek</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Better Together &#8211; Stefanie &#038; Mathieu zeggen ja</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta property="og:url" content="https://www.wearebettertogether.be/"/>
+    <meta property="og:site_name" content="Better Together"/>
+    <style>
+        img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }
+        .wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+        .rechts, .rechts * {text-align:left;}
+        .wpb_wrapper .laborator-btn {margin-bottom: 0px;}
+        .wpb_button, .wpb_content_element, ul.wpb_thumbnails-fluid>li {margin-bottom: 0px;}
+        .section-title {margin-bottom: 0px;}
+        .wpb_wrapper .laborator-btn.btn-type-outlined.btn-primary {border-color: transparent;}
+        .wpb_wrapper .laborator-btn.btn-type-outlined-bg.btn-primary:hover {border-color: transparent;}
+        .btn.btn-primary:hover {background: #e5a917 !important;}
+        @media only screen and (max-width: 800px) {
+        }
+        .single-post .comment-form > p.comment-form-cookies-consent input[type=checkbox]:before, input[type=checkbox]:before, input[type=radio]:before {background-color: #e5a917;}
+        input[type="checkbox"], input[type="radio"] {border: 1px solid #e5a917;}
+        .rsvpFormField {margin: 20px 0 10px 0px;}
+        input[type="checkbox"], input[type="radio"] {margin-left: 6px;}
+        h2 {color: #e5a917;}input[type="text"], input[type="number"], input[type="email"], input[type="password"], input[type="number"], input[type="url"], input[type="tel"], textarea {    font-size: 13px !important;}@media screen and (max-width: 768px) {.header-logo.logo-image img {width: 80%; max-width: 80%;}.page-id-135 .wpb_single_image {display:none;} h2 {font-size: 20px;}.gastrechts {float: none;width: 100%;margin-left: 0;margin-top: 40px;}}
+        .header-logo.logo-image {width: 432px;height: 188px;}
+        @media screen and (min-width:770px) { .mobile-menu-wrapper,.mobile-menu-overlay,.standard-menu-container .menu-bar-hidden-desktop {display: none;} }
+        @media screen and (max-width:769px) { .header-logo.logo-image {width: 380px ;height: 165.37037037037px ;} }
+    </style>
+    <link rel="stylesheet" id="bootstrap-css" href="https://www.wearebettertogether.be/wp-content/themes/kalium/assets/css/bootstrap.css" media="all" />
+    <link rel="stylesheet" id="style-css-override" href="css/style.css" media="all" />
+    <script>var mobile_menu_breakpoint = 769;</script>
 </head>
-<body>
-  <div id="intro">
-    <h1>Welkom!</h1>
-    <div id="NaamInvullen">
-        <p>Vul je naam in om mee te doen!</p>
-        <input id="nameInput" placeholder="Jouw naam">
-        <button id="nameRegister" onclick="register()">Start</button>
-      </div>
-    <p id="StartinginaSecond" style="display:none">We starten zo meteen.</p>
-  </div>
+<body class="home page-template-default page page-id-8 wp-embed-responsive wpb-js-composer js-comp-ver-8.2 vc_responsive">
+    <div class="wrapper" id="main-wrapper">
+        <header class="main-header">
+            <img itemprop="logo" src="img/logo.png" class="main-logo" alt="Better Together" style="width:50%; min-width: 500px; height: 100%;" />
+        </header>
+        <div id="container">
+            <div id="intro">
+                <h1>Welkom!</h1>
+                <div id="NaamInvullen">
+                    <p>Vul je naam in om mee te doen!</p>
+                    <input id="nameInput" placeholder="Jouw naam">
+                    <button id="nameRegister" onclick="register()">Start</button>
+                  </div>
+                <p id="StartinginaSecond" style="display:none">We starten zo meteen.</p>
+              </div>
 
-  <div id="question" style="display:none">
-    <h2 id="questionText"></h2>
-    <button onclick="vote('bruid')">👰 Stefanie</button>
-    <button onclick="vote('bruidegom')">🤵 Mathieu</button>
-  </div>
+              <div id="question" style="display:none">
+                <h2 id="questionText"></h2>
+                <button onclick="vote('bruid')">👰 Stefanie</button>
+                <button onclick="vote('bruidegom')">🤵 Mathieu</button>
+              </div>
 
-  <div id="waiting" style="display:none">
-    <h2>Bedankt om te stemmen!</h2>
-    <p>Wacht op het resultaat...</p>
-  </div>
+              <div id="waiting" style="display:none">
+                <h2>Bedankt om te stemmen!</h2>
+                <p>Wacht op het resultaat...</p>
+              </div>
 
-  <div id="feedback" style="display:none">
-    <h2 id="feedbackText"></h2>
-  </div>
+              <div id="feedback" style="display:none">
+                <h2 id="feedbackText"></h2>
+              </div>
 
-  <div id="scoreboard" style="display:none">
-    <h2>Top 10</h2>
-    <ol id="rankingList"></ol>
-  </div>
-
+              <div id="scoreboard" style="display:none">
+                <h2>Top 10</h2>
+                <ol id="rankingList"></ol>
+              </div>
+        </div>
+    </div>
   <script src="/js/screen_public.js"></script>
 </body>
 </html>
