@@ -3,9 +3,14 @@ let ws = new WebSocket("wss://" + location.host + "/ws/public");
 let currentScreen = "intro";
 
 function register() {
-  const name = document.getElementById("nameInput").value;
+  const name = document.getElementById("nameInput").value.trim();
+  if (!name) {
+    alert("Vul eerst je naam in."); // of laat deze lijn weg als je géén pop-up wil
+    return;
+  }
   ws.send(JSON.stringify({ type: "register", name: name }));
   document.getElementById("intro").style.display = "none";
+  document.getElementById("waiting").style.display = "";  // ? TOEVOEGEN
   currentScreen = "waiting";
 }
 
