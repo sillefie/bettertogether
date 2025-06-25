@@ -13,6 +13,33 @@ window.addEventListener("load", () => {
 });
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
+    if (data.type === "show_photo") {
+      const img = document.getElementById("ai_img");
+      const feedback = document.getElementById("screen_feedback");
+      img.src = data.image;
+      img.style.display = "block";
+      feedback.innerHTML = "";
+      setTimeout(() => {
+        img.style.display = "none";
+        feedback.innerHTML = "oh oow … heb je dat gezien?";
+      }, 3000);
+      return;
+    }
+    if (data.type === "feedback") {
+      const img      = document.getElementById("ai_img");
+      const feedback = document.getElementById("screen_feedback");
+      img.style.display = "none";
+
+      if (data.result === "same") {
+        feedback.innerHTML =
+          `<h1>${data.winner}!</h1>` +
+          `<div class="green-bar" style="width:${data.percent}%">${data.percent}%</div>`;
+      } else {
+        feedback.innerHTML =
+          `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dan gebeuren er rare dingen, kijk maar mee op het grote scherm 🙈</h1>`;
+      }
+    }
+    
     if (data.type === "screen") {
       showScreen(data.screen);
     }

@@ -32,6 +32,8 @@
         <button onclick="confirmSameStefanie()">Zelfde antwoord = Stefanie</button>
         <button onclick="confirmSameMathieu()">Zelfde antwoord = Mathieu</button>
         <button onclick="confirmDifferent()">Verschillend antwoord</button>
+    <button onclick="showPhoto()">Toon AI-foto</button>
+    <button onclick="repeatPhoto()">Herhaal AI-foto</button>
     </section>
 
     <section>
@@ -87,6 +89,12 @@
     }
     function endQuiz() {
         socket.send(JSON.stringify({ command: "end_quiz" }));
+    }
+    function showPhoto() {
+      socket.send(JSON.stringify({ command: "show_photo" }));
+    }
+    function repeatPhoto() {
+      socket.send(JSON.stringify({ command: "repeat_photo" }));
     }
     window.onload = () => {
       const select = document.getElementById("questionSelect");
