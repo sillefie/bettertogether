@@ -150,6 +150,19 @@ async def websocket_admin(ws: WebSocket):
                 state["used_ai"].append(chosen)
                 save_state(state)
                 await broadcast(public_clients.values(), {"type": "feedback", "result": "wrong", "image": chosen})
+            elif cmd == "show_photo":
+                # stuur een show_photo-event naar alle schermen
+                await broadcast(display_clients.values(), {
+                    "type": "show_photo",
+                    "image": state["last_ai"]
+                })
+
+            elif cmd == "repeat_photo":
+                # herhaal dezelfde foto
+                await broadcast(display_clients.values(), {
+                    "type": "show_photo",
+                    "image": state["last_ai"]
+                })
             elif cmd == "end_quiz":
                 counts = {}
                 for name in state["votes"]:
