@@ -153,14 +153,14 @@ async def websocket_admin(ws: WebSocket):
                 await broadcast(public_clients.values(), {"type": "feedback", "result": "wrong", "image": chosen})
             elif cmd == "show_photo":
                 # stuur een show_photo-event naar alle schermen
-                await broadcast(display_clients.values(), {
+                await broadcast(public_clients.values(), {
                     "type": "show_photo",
                     "image": state["last_ai"]
                 })
 
             elif cmd == "repeat_photo":
                 # herhaal dezelfde foto
-                await broadcast(display_clients.values(), {
+                await broadcast(public_clients.values(), {
                     "type": "show_photo",
                     "image": state["last_ai"]
                 })
