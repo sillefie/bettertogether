@@ -35,7 +35,7 @@ socket.onmessage = (event) => {
         document.body.classList.remove("feedback-wrong");
         img.style.display = "none";
         feedback.innerHTML =
-          `<h1>${data.winner}!</h1>` +
+          `<h1>${data.winning_name}!</h1>` +
           `<div class="green-bar" style="width:${data.percent}%">${data.percent}%</div>`;
       // 2) Wrong‐flow: start met het pure rode scherm
       } else if (data.result === "wrong") {
