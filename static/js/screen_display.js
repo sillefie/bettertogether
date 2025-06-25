@@ -34,18 +34,25 @@ socket.onmessage = (event) => {
       if (data.result === "same") {
         document.body.classList.remove("feedback-wrong");
         img.style.display = "none";
-        feedback.innerHTML =
-          `<h1>${data.winning_name}!</h1>` +
-          `<div class="green-bar" style="width:${data.percent}%">${data.percent}%</div>`;
+    const winner = data.winning_name;
+    const total = data.votes_total;
+    const percent = total > 0
+      ? Math.round((Math.max(data.votes_stefanie, data.votes_mathieu) / total) * 100)
+      : 0;
+
+    feedback.innerHTML =
+      `<h1>${winner}!</h1>` +
+      `<div class="green-bar" style="width:${percent}%">${percent}%</div>`;
+  }
       // 2) Wrong‐flow: start met het pure rode scherm
-      } else if (data.result === "wrong") {
+      else if (data.result === "wrong") {
         document.body.classList.add("feedback-wrong");
         img.style.display = "none";
         feedback.innerHTML =
           `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dat kunnen we niet zo laten …</h1>`;
-
+      } 
       // 3) Fallback (zou niet mogen gebeuren)
-      } else {
+      else {
         console.warn("Onbekend feedback-result:", data.result);
       }
     }
