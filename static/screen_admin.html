@@ -49,7 +49,7 @@
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "screen") {
-        document.getElementById("screen_status").textContent = data.screen;
+        // eventueel visuele indicator van actief scherm
       }
       if (data.type === "votes") {
         const votes = data.votes;

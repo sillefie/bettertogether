@@ -117,8 +117,8 @@ async def websocket_admin(ws: WebSocket):
             elif cmd == "same_answer":
                 await broadcast(public_clients.values(), {"type": "feedback", "result": "correct"})
             elif cmd in ["same_answer_stefanie", "same_answer_mathieu"]:
-                winning_name = "Stefanie" if msg["command"] == "same_answer_stefanie" else "Mathieu"
-                votes = state.votes
+                winning_name = "Stefanie" if cmd == "same_answer_stefanie" else "Mathieu"
+                votes = state["votes"]
                 votes_stefanie = sum(1 for v in votes.values() if v == "Stefanie")
                 votes_mathieu = sum(1 for v in votes.values() if v == "Mathieu")
                 total_votes = len(votes)
@@ -130,7 +130,7 @@ async def websocket_admin(ws: WebSocket):
                     (votes_stefanie > votes_mathieu and winning_name == "Stefanie") or
                     (votes_mathieu > votes_stefanie and winning_name == "Mathieu")
                 )
-                await state.send_to_all({
+                await broadcast({
                     "type": "feedback",
                     "result": "same",
                     "winning_name": winning_name,
