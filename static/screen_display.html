@@ -22,10 +22,10 @@
                 <h1></h1>
                 <p></p>
             </div>
-
             <div id="screen_qr" class="screen"  style="display:none">
-                <div style="float:left;width:40%; margin-left:2%;"><h1>Scan de QR code en doe mee!</h1><p>Je kan mee stemmen met je gsm 😍</p></div>
-                 <div style="float:left;width:55%;margin-left:2%;"><img id="qrcode" src="img/qr.png" style="max-width: 500px; width: 80%"/></div>
+                <div style="float:left;width:30%; margin-left:5%;"><h2 style="font-size: 4em;
+    line-height: 1em;">Scan de QR code en doe mee!</h2><p>Zo kan je stemmen met je gsm 😍</p></div>
+                 <div style="float:left;width:55%;margin-left:5%;margin-right:5%;"><img id="qrcode" src="img/qr.png" style="max-width: 400px; width: 70%;"/></div>
             </div>
 
             <div id="screen_intro" class="screen"  style="display:none">
@@ -40,69 +40,66 @@
                 <h1 id="question_text">Klaar voor de volgende vraag?</h1>
                 <p>Stem nu met je smartphone!</p>
             </div>
-
-              <div id="feedback" style="display:none">
-                  <h2 id="answerSTEM"></h2>
-                  <h2 id="answerCrowd"></h2>
-              </div>
-
-          <div id="screen_scoreboard" class="screen" style="display:none">
-            <h2>Stemmen</h2>
-            <ol id="ranking"></ol>
-            <ul id="live_votes"></ul>
-          </div>
-
+            
+            <div id="screen_feedback" class="screen" style="display:block">
+                <h1 id="feedback"></h1>
+                <h2 id="answerSTEM"></h2>
+                 <h2 id="answerCrowd"></h2>
+                <img id="ai_img" style="max-width:100%;display:none">
+            </div>
+            
+            <div id="screen_scoreboard" class="screen" style="display:none">
+                <h2>Stemmen</h2>
+                <ol id="ranking"></ol>
+                <ul id="live_votes"></ul>
+            </div>
             <script src="js/screen_display.js"></script>
         </div>
     </div>
     <script>
-    const screenIntro = document.getElementById('screen_intro');
-const screenUitleg = document.getElementById('screen_uitleg');
+        const screenIntro = document.getElementById('screen_intro');
+        const screenUitleg = document.getElementById('screen_uitleg');
+        const audio = document.getElementById('my-audio');
+        const video = document.getElementById('my-video');
 
-const audio = document.getElementById('my-audio');
-const video = document.getElementById('my-video');
-
-document.addEventListener('keydown', async (e) => {
-  if (e.code !== 'Space') return;
-
-  e.preventDefault();
-
-  if (screenIntro.style.display !== 'none') {
-    // We zitten in intro scherm: speel audio af
-    if (video && !video.paused) {
-      video.pause();
-      video.currentTime = 0;
-      video.style.display = 'none';
-      if (document.fullscreenElement) {
-        await document.exitFullscreen();
-      }
-    }
-    try {
-      await audio.play();
-    } catch(err) {
-      console.warn('Audio kon niet afspelen:', err);
-    }
-  }
-  else if (screenUitleg.style.display !== 'none') {
-    // We zitten in uitleg scherm: stop audio, speel video fullscreen
-    if (audio && !audio.paused) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-
-    video.style.display = 'block';
-    try {
-      if (video.requestFullscreen) {
-        await video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        await video.webkitRequestFullscreen();
-      }
-      await video.play();
-    } catch(err) {
-      console.error('Video kon niet afspelen of fullscreen:', err);
-    }
-  }
-});
-</script>
+        document.addEventListener('keydown', async (e) => {
+          if (e.code !== 'Space') return;
+          e.preventDefault();
+          if (screenIntro.style.display !== 'none') {
+            // We zitten in intro scherm: speel audio af
+            if (video && !video.paused) {
+              video.pause();
+              video.currentTime = 0;
+              video.style.display = 'none';
+              if (document.fullscreenElement) {
+                await document.exitFullscreen();
+              }
+            }
+            try {
+              await audio.play();
+            } catch(err) {
+              console.warn('Audio kon niet afspelen:', err);
+            }
+          }
+          else if (screenUitleg.style.display !== 'none') {
+            // We zitten in uitleg scherm: stop audio, speel video fullscreen
+            if (audio && !audio.paused) {
+              audio.pause();
+              audio.currentTime = 0;
+            }
+            video.style.display = 'block';
+            try {
+              if (video.requestFullscreen) {
+                await video.requestFullscreen();
+              } else if (video.webkitRequestFullscreen) {
+                await video.webkitRequestFullscreen();
+              }
+              await video.play();
+            } catch(err) {
+              console.error('Video kon niet afspelen of fullscreen:', err);
+            }
+          }
+        });
+    </script>
 </body>
 </html>

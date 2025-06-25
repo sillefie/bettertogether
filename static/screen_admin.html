@@ -28,9 +28,9 @@
 
     <section>
       <h2>Antwoord check</h2>
+        <!-- <button onclick="confirmSame()">Zelfde antwoord</button>!-->
         <button onclick="confirmSameStefanie()">Zelfde antwoord = Stefanie</button>
         <button onclick="confirmSameMathieu()">Zelfde antwoord = Mathieu</button>
-      <!-- <button onclick="confirmSame()">Zelfde antwoord</button>!-->
         <button onclick="confirmDifferent()">Verschillend antwoord</button>
     </section>
 
@@ -44,10 +44,8 @@
       <ul id="votes_list"></ul>
     </section>
   </div>
-
   <script>
     const socket = new WebSocket(`wss://${location.host}/ws/admin`);
-
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "screen") {
@@ -64,11 +62,9 @@
         });
       }
     };
-
     function setScreen(screenName) {
       socket.send(JSON.stringify({ command: "set_screen", screen: screenName }));
     }
-
     function sendSelectedQuestion() {
       const select = document.getElementById("questionSelect");
       const index = select.selectedIndex;
@@ -77,26 +73,21 @@
     function sendQuestion(index) {
         socket.send(JSON.stringify({ command: "set_question", idx: index }));
     }
-
     /* function confirmSame() {
         socket.send(JSON.stringify({ command: "same_answer" }));
     }*/
     function confirmSameStefanie() {
       socket.send(JSON.stringify({ command: "same_answer_stefanie" }));
     }
-
     function confirmSameMathieu() {
       socket.send(JSON.stringify({ command: "same_answer_mathieu" }));
     }
-
     function confirmDifferent() {
         socket.send(JSON.stringify({ command: "different_answer" }));
     }
-
     function endQuiz() {
         socket.send(JSON.stringify({ command: "end_quiz" }));
     }
-
     window.onload = () => {
       const select = document.getElementById("questionSelect");
       const vragen = [
@@ -119,7 +110,6 @@
         select.appendChild(opt);
       });
     };
-  </script>
-    
+  </script> 
 </body>
 </html>
