@@ -130,7 +130,7 @@ async def websocket_admin(ws: WebSocket):
                     (votes_stefanie > votes_mathieu and winning_name == "Stefanie") or
                     (votes_mathieu > votes_stefanie and winning_name == "Mathieu")
                 )
-                await broadcast({
+                await broadcast(public_clients.values(),{
                     "type": "feedback",
                     "result": "same",
                     "winning_name": winning_name,
