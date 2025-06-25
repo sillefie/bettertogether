@@ -13,30 +13,39 @@ window.addEventListener("load", () => {
 });
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    if (data.type === "show_photo") {
-      const img = document.getElementById("ai_img");
-      const feedback = document.getElementById("screen_feedback");
-      img.src = data.image;
-      img.style.display = "block";
-      feedback.innerHTML = "";
-      setTimeout(() => {
-        img.style.display = "none";
-        feedback.innerHTML = "oh oow … heb je dat gezien?";
-      }, 3000);
-      return;
-    }
-    if (data.type === "feedback") {
+if (data.type === "show_photo") {
+    const img      = document.getElementById("ai_img");
+    const feedback = document.getElementById("feedback");
+    img.src         = data.image;
+    img.style.display = "block";
+    feedback.innerHTML = "";
+    setTimeout(() => {
+      img.style.display   = "none";
+      feedback.textContent = "oh oow … heb je dat gezien?";
+    }, 3000);
+    return;
+  }    if (data.type === "feedback") {
       const img      = document.getElementById("ai_img");
       const feedback = document.getElementById("screen_feedback");
       img.style.display = "none";
 
+      // 1) Same‐flow
       if (data.result === "same") {
+        document.body.classList.remove("feedback-wrong");
+        img.style.display = "none";
         feedback.innerHTML =
           `<h1>${data.winner}!</h1>` +
           `<div class="green-bar" style="width:${data.percent}%">${data.percent}%</div>`;
-      } else {
+      // 2) Wrong‐flow: start met het pure rode scherm
+      } else if (data.result === "wrong") {
+        document.body.classList.add("feedback-wrong");
+        img.style.display = "none";
         feedback.innerHTML =
-          `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dan gebeuren er rare dingen, kijk maar mee op het grote scherm 🙈</h1>`;
+          `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dat kunnen we niet zo laten …</h1>`;
+
+      // 3) Fallback (zou niet mogen gebeuren)
+      } else {
+        console.warn("Onbekend feedback-result:", data.result);
       }
     }
     

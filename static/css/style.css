@@ -107,3 +107,7 @@ input.form-control{
         .header-logo.logo-image {width: 432px;height: 188px;}
         @media screen and (min-width:770px) { .mobile-menu-wrapper,.mobile-menu-overlay,.standard-menu-container .menu-bar-hidden-desktop {display: none;} }
         @media screen and (max-width:769px) { .header-logo.logo-image {width: 380px ;height: 165.37037037037px ;} }
+.feedback-wrong {
+  background-color: #c00;    /* of een precies rood dat bij het thema past */
+  color: white;
+}
