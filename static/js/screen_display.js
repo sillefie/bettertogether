@@ -85,9 +85,10 @@ socket.onmessage = (event) => {
       }
     }
     if (data.type === "votes") {
-      // Reset het feedback-gedeelte visueel
-      document.getElementById("screen_feedback").innerHTML = "";
-      img.style.display = "none";
+      const feedback = document.getElementById("screen_feedback");
+      if (feedback) feedback.innerHTML = "";
+      const img = document.getElementById("ai_img");
+      if (img) img.style.display = "none";
     }
     if (data.type === "screen") {
       showScreen(data.screen);
