@@ -28,12 +28,12 @@ socket.onmessage = (event) => {
     if (data.type === "feedback") {
       const img      = document.getElementById("ai_img");
       const feedback = document.getElementById("screen_feedback");
-      img.style.display = "none";
+      if (img) img.style.display = "none";
 
       // 1) Same‐flow
       if (data.result === "same") {
         document.body.classList.remove("feedback-wrong");
-        img.style.display = "none";
+        if (img) img.style.display = "none";
 
         const winner = data.winning_name;
         const total = data.votes_total;
@@ -96,10 +96,17 @@ socket.onmessage = (event) => {
     if (data.type === "question") {
         document.getElementById("question_text").textContent = data.text;
         showScreen("vote");
-        const feedback = document.getElementById("screen_feedback");
-        if (feedback) feedback.innerHTML = "";
-        const img = document.getElementById("ai_img");
-        if (img) img.style.display = "none"; 
+      /* reset alles van de vorige vraag */
+      const feedback = document.getElementById("screen_feedback");
+      if (feedback) feedback.innerHTML = "";
+
+      const aiImg = document.getElementById("ai_img");
+      if (aiImg) aiImg.style.display = "none";
+
+      /* zet ook lokale teller‐variabelen op nul, zodat
+         de volgende feedback nooit oude percentages toont */
+      lastVotesStefanie = 0;
+      lastVotesMathieu = 0;
     }    
     if (data.type === "scoreboard") {
         const list = document.getElementById("ranking");
