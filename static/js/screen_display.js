@@ -34,15 +34,43 @@ socket.onmessage = (event) => {
       if (data.result === "same") {
         document.body.classList.remove("feedback-wrong");
         img.style.display = "none";
+
         const winner = data.winning_name;
         const total = data.votes_total;
-        const percent = total > 0
-      ? Math.round((Math.max(data.votes_stefanie, data.votes_mathieu) / total) * 100)
-      : 0;
+        const votes_stefanie = data.votes_stefanie;
+        const votes_mathieu = data.votes_mathieu;
+        const percent_stefanie = total > 0 ? Math.round((votes_stefanie / total) * 100) : 0;
+        const percent_mathieu = total > 0 ? Math.round((votes_mathieu / total) * 100) : 0;
+        const diff = Math.abs(votes_stefanie - votes_mathieu);
+        const same_vote = (votes_stefanie === votes_mathieu);
 
-        feedback.innerHTML =
-      `<h1>${winner}!</h1>` +
-      `<div class="green-bar" style="width:${percent}%">${percent}%</div>`;
+        let nuance = "";
+
+        if (same_vote) {
+            // Publiek stemde gelijk
+            if (diff > 20) {
+              nuance = `<p><strong>EN</strong> Amaai, iedereen hier kent jullie door en door.</p>`;
+            } else {
+              nuance = `<p><strong>EN</strong> Jullie vrienden denken er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ;)</p>`;
+            }
+          } else {
+            // Publiek stemde anders
+            if (diff > 20) {
+              nuance = `<p><strong>MAAR</strong> eeeeeuhm, iedereen hier denkt er precies wel anders over 😅</p>`;
+            } else {
+              nuance = `<p><strong>MAAR</strong> Jullie vrienden denken er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ;)</p>`;
+            }
+        }
+        feedback.innerHTML = `
+        <h1>Wauw! Jullie denken er net hetzelfde over 🤍</h1>
+        <h2>'t is ${winner}</h2>
+        <div class="bar-container">
+          <div class="vote-bar stefanie" style="width:${percent_stefanie}%">Stefanie: ${percent_stefanie}%</div>
+          <div class="vote-bar mathieu" style="width:${percent_mathieu}%">Mathieu: ${percent_mathieu}%</div>
+        </div>
+        ${nuance}
+        `
+        ;
       }
       // 2) Wrong‐flow: start met het pure rode scherm
       else if (data.result === "wrong") {

@@ -111,3 +111,21 @@ input.form-control{
   background-color: #c00;    /* of een precies rood dat bij het thema past */
   color: white;
 }
+
+.bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-top: 1em;
+}
+.vote-bar {
+  padding: 0.5em;
+  color: white;
+  font-weight: bold;
+}
+.vote-bar.stefanie {
+  background-color: #da71aa; /* Roze */
+}
+.vote-bar.mathieu {
+  background-color: #3c8fc3; /* Blauw */
+}
