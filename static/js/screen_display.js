@@ -84,6 +84,11 @@ socket.onmessage = (event) => {
         console.warn("Onbekend feedback-result:", data.result);
       }
     }
+    if (data.type === "votes") {
+      // Reset het feedback-gedeelte visueel
+      document.getElementById("screen_feedback").innerHTML = "";
+      img.style.display = "none";
+    }
     if (data.type === "screen") {
       showScreen(data.screen);
     }

@@ -20,7 +20,7 @@ function register() {
 
 
 function vote(v) {
-  ws.send(JSON.stringify({ type: "vote", vote: v }));
+  ws.send(JSON.stringify({ type: "vote", vote: v }));v
   document.getElementById("intro").style.display = "none";
   document.getElementById("question").style.display = "none";
   document.getElementById("waiting").style.display = "";
