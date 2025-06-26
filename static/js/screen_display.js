@@ -96,6 +96,10 @@ socket.onmessage = (event) => {
     if (data.type === "question") {
         document.getElementById("question_text").textContent = data.text;
         showScreen("vote");
+        const feedback = document.getElementById("screen_feedback");
+        if (feedback) feedback.innerHTML = "";
+        const img = document.getElementById("ai_img");
+        if (img) img.style.display = "none"; 
     }    
     if (data.type === "scoreboard") {
         const list = document.getElementById("ranking");
