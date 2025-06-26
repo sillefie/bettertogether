@@ -34,16 +34,16 @@ socket.onmessage = (event) => {
       if (data.result === "same") {
         document.body.classList.remove("feedback-wrong");
         img.style.display = "none";
-    const winner = data.winning_name;
-    const total = data.votes_total;
-    const percent = total > 0
+        const winner = data.winning_name;
+        const total = data.votes_total;
+        const percent = total > 0
       ? Math.round((Math.max(data.votes_stefanie, data.votes_mathieu) / total) * 100)
       : 0;
 
-    feedback.innerHTML =
+        feedback.innerHTML =
       `<h1>${winner}!</h1>` +
       `<div class="green-bar" style="width:${percent}%">${percent}%</div>`;
-  }
+      }
       // 2) Wrong‐flow: start met het pure rode scherm
       else if (data.result === "wrong") {
         document.body.classList.add("feedback-wrong");
@@ -63,24 +63,6 @@ socket.onmessage = (event) => {
         document.getElementById("question_text").textContent = data.text;
         showScreen("vote");
     }    
-    /** if (data.result === "crowdsame") {
-        if (data.result === "over20") {
-            answerCrowd.textContent = "Amaai, iedereen hier kent jullie door en door ?.";
-        } else {
-            answerCrowd.textContent = "Iedereen denkt er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ?";
-        }
-            feedback.style.color = "black";
-            img.style.display = "none";
-    }
-    if (data.result === "crowddiff") {
-        if (data.result === "over20") {
-            answerCrowd.textContent = "Eeeeeuhm, iedereen denkt er precies wel anders over ?.";
-        } else {
-            answerCrowd.textContent = "Iedereen denkt er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ?";
-        }
-            feedback.style.color = "black";
-            img.style.display = "none";
-    } **/
     if (data.type === "scoreboard") {
         const list = document.getElementById("ranking");
         list.innerHTML = "";
