@@ -102,6 +102,20 @@ async def websocket_admin(ws: WebSocket):
                 state["screen"] = data["screen"]
                 save_state(state)
                 await broadcast(public_clients.values(), {"type": "screen", "screen": state["screen"]})
+                if data["screen"] == "match":
+                    votes = state["votes"]
+                    votes_stefanie = sum(1 for v in votes.values() if v == "Stefanie")
+                    votes_mathieu = sum(1 for v in votes.values() if v == "Mathieu")
+                    total_votes = len(votes)
+
+                    await broadcast(display_clients, {
+                        "type": "feedback",
+                        "result": "same",
+                        "winning_name": data.get("winning_name", "??"),
+                        "votes_stefanie": votes_stefanie,
+                        "votes_mathieu": votes_mathieu,
+                        "votes_total": total_votes,
+                    })
             elif cmd == "set_question":
                 idx = int(data["idx"])
                 if 0 <= idx < len(questions):
