@@ -16,7 +16,7 @@ socket.onmessage = (event) => {
     if (data.type === "show_photo") {
         const img      = document.getElementById("ai_img");
         const feedback = document.getElementById("screen_feedback");
-        img.src         = data.image;
+        img.src = "/" + data.image;
         img.style.display = "block";
         feedback.innerHTML = "";
         setTimeout(() => {
@@ -47,11 +47,6 @@ socket.onmessage = (event) => {
       // 2) Wrong‐flow: start met het pure rode scherm
       else if (data.result === "wrong") {
         document.body.classList.add("feedback-wrong");
-        img.style.display = "none";
-        if (data.image) {
-          img.src = "/" + data.image;
-          img.style.display = "block";
-        }
         feedback.innerHTML =
           `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dat kunnen we niet zo laten …</h1>`;
       } 
