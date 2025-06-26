@@ -71,6 +71,7 @@ socket.onmessage = (event) => {
         ${nuance}
         `
         ;
+        console.log("Stefanie:", data.votes_stefanie, "Mathieu:", data.votes_mathieu);
       }
       // 2) Wrong‐flow: start met het pure rode scherm
       else if (data.result === "wrong") {
