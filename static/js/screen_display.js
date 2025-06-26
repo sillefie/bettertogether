@@ -49,7 +49,7 @@ socket.onmessage = (event) => {
         document.body.classList.add("feedback-wrong");
         img.style.display = "none";
         if (data.image) {
-          img.src = data.image;
+          img.src = "/" + data.image;
           img.style.display = "block";
         }
         feedback.innerHTML =
