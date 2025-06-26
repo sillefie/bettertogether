@@ -15,7 +15,7 @@ socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     if (data.type === "show_photo") {
         const img      = document.getElementById("ai_img");
-        const feedback = document.getElementById("feedback");
+        const feedback = document.getElementById("screen_feedback");
         img.src         = data.image;
         img.style.display = "block";
         feedback.innerHTML = "";
@@ -48,6 +48,10 @@ socket.onmessage = (event) => {
       else if (data.result === "wrong") {
         document.body.classList.add("feedback-wrong");
         img.style.display = "none";
+        if (data.image) {
+          img.src = data.image;
+          img.style.display = "block";
+        }
         feedback.innerHTML =
           `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dat kunnen we niet zo laten …</h1>`;
       } 
