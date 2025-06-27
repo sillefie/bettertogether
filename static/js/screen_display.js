@@ -16,17 +16,16 @@ window.addEventListener("load", () => {
     rulesAudio.currentTime = 0;
   }).catch(() => {});
 });
+
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-console.log("DATA:", data);
+    console.log("DATA:", data);
     if (data.type === "show_photo" || data.type === "replay_photo") {
       showScreen("feedback");
-
       setTimeout(() => {
         const aiImg = document.getElementById("ai_img");
         const feedback = document.getElementById("screen_feedback");
         if (!aiImg || !feedback) return;
-
         aiImg.src = "/" + data.image;
         aiImg.style.display = "block";
         feedback.innerHTML = feedbackTemplateHTML;
@@ -40,12 +39,10 @@ console.log("DATA:", data);
     }
     if (data.type === "feedback" && data.result === "wrong" && data.image) {
       showScreen("feedback");
-
       setTimeout(() => {
         const aiImg = document.getElementById("ai_img");
         const feedback = document.getElementById("screen_feedback");
         if (!aiImg || !feedback) return;
-
         aiImg.src = "/" + data.image;
         aiImg.style.display = "block";
         feedback.innerHTML = feedbackTemplateHTML;
@@ -94,21 +91,35 @@ console.log("DATA:", data);
               nuance = `<p><strong>MAAR</strong> Jullie vrienden denken er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ;)</p>`;
             }
         }
-        feedback.innerHTML = `
-        <h1>Wauw! Jullie denken er net hetzelfde over ü§ç:<br>${winner}</h1>
-        <div class="bar-container">
-          <div class="vote-bar stefanie" style="width:${percent_stefanie}%">Stefanie: ${percent_stefanie}%</div>
-          <div class="vote-bar mathieu" style="width:${percent_mathieu}%">Mathieu: ${percent_mathieu}%</div>
-        </div>
-        ${nuance}
-        `
-        ;
+feedback.innerHTML = feedbackTemplateHTML;
+
+const h1 = document.getElementById("feedback");
+if (h1) h1.innerHTML = `Wauw! Jullie denken er net hetzelfde over ?:<br>${winner}`;
+
+// stemmenbalken en nuance
+const answerSTEM = document.getElementById("answerSTEM");
+if (answerSTEM) {
+  answerSTEM.innerHTML = `
+    <div class="bar-container">
+      <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
+        Stefanie: ${percent_stefanie}%
+      </div>
+      <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
+        Mathieu: ${percent_mathieu}%
+      </div>
+    </div>`;
+}
+
+const answerCrowd = document.getElementById("answerCrowd");
+if (answerCrowd) answerCrowd.innerHTML = nuance;
+
       }
       // 2) Wrong‚Äêflow: start met het pure rode scherm
       else if (data.result === "wrong") {
         document.body.classList.add("feedback-wrong");
-        feedback.innerHTML =
-          `<h1>Oh nee ‚Ä¶ Stefanie & Mathieu hebben niet hetzelfde geantwoord ‚Ä¶ dat kunnen we niet zo laten ‚Ä¶</h1>`;
+          feedback.innerHTML = feedbackTemplateHTML;
+          const h1 = document.getElementById("feedback");
+          if (h1) h1.textContent = "Oh nee Ö Stefanie & Mathieu hebben niet hetzelfde geantwoord Ö dat kunnen we niet zo laten Ö";
       } 
       // 3) Fallback (zou niet mogen gebeuren)
       else {
