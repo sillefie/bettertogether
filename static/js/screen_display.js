@@ -62,8 +62,7 @@ socket.onmessage = (event) => {
             }
         }
         feedback.innerHTML = `
-        <h1>Wauw! Jullie denken er net hetzelfde over 🤍</h1>
-        <h2>'t is ${winner}</h2>
+        <h1>Wauw! Jullie denken er net hetzelfde over 🤍:<br>${winner}</h1>
         <div class="bar-container">
           <div class="vote-bar stefanie" style="width:${percent_stefanie}%">Stefanie: ${percent_stefanie}%</div>
           <div class="vote-bar mathieu" style="width:${percent_mathieu}%">Mathieu: ${percent_mathieu}%</div>
