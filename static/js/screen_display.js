@@ -13,49 +13,25 @@ window.addEventListener("load", () => {
 });
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    /* if (data.type === "show_photo") {
-        const img      = document.getElementById("ai_img");
-        const feedback = document.getElementById("screen_feedback");
-        img.src = "/" + data.image;
-        img.style.display = "block";
-        feedback.innerHTML = "";
-        setTimeout(() => {
-          img.style.display   = "none";
-          feedback.textContent = "oh oow â€¦ heb je dat gezien?";
-        }, 3000);
-        return;
-      }    
-    if (data.type === "replay_photo") {
-      const feedback = document.getElementById("screen_feedback");
-      const img      = document.getElementById("ai_img");
-huh?????      img.src = "/" + data.image;
-      img.style.display = "block";
-      feedback.innerHTML = "";
+    if (data.type === "show_photo" || data.type === "replay_photo") {
+      showScreen("feedback");
+
       setTimeout(() => {
-        img.style.display   = "none";
-        feedback.textContent = "oh oow … heb je dat gezien?";
-      }, 3000);
+        const aiImg = document.getElementById("ai_img");
+        const feedback = document.getElementById("screen_feedback");
+        if (!aiImg || !feedback) return;
+
+        aiImg.src = "/" + data.image;
+        aiImg.style.display = "block";
+        feedback.innerHTML = "";
+
+        setTimeout(() => {
+          aiImg.style.display = "none";
+          feedback.textContent = "oh oow … heb je dat gezien?";
+        }, 3000);
+      }, 100);
       return;
-    }    */
-/* --- AI-foto tonen of herhalen --- */
-if (data.type === "show_photo" || data.type === "replay_photo") {
-  // zorg dat het scherm met het <img id="ai_img"> actief is
-  showScreen("feedback");
-
-  const aiImg = document.getElementById("ai_img");
-  if (!aiImg) return;                // veiligheid – bestaat element?
-
-  aiImg.src = "/" + data.image;      // pad komt als "static/img/aiX.jpg"
-  aiImg.style.display = "block";
-
-  setTimeout(() => {
-    aiImg.style.display = "none";
-    const feedback = document.getElementById("screen_feedback");
-    if (feedback) feedback.textContent = "oh oow … heb je dat gezien?";
-  }, 3000);
-
-  return; // verder geen andere handlers verwerken
-}    
+    }
     if (data.type === "feedback") {
       const img      = document.getElementById("ai_img");
       const feedback = document.getElementById("screen_feedback");
