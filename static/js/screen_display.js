@@ -1,4 +1,9 @@
 const socket = new WebSocket(`wss://${location.host}/ws/public`);
+/* ----------------------------------------------------------
+   Basissjabloon feedback bewaren zodat we het kunnen resetten
+   ---------------------------------------------------------- */
+const feedbackContainer      = document.getElementById("screen_feedback");
+const feedbackTemplateHTML   = feedbackContainer.innerHTML;   // bevat <h1><h2>… + <img id="ai_img">
 
 window.addEventListener("load", () => {
   introAudio.play().then(() => {
@@ -24,7 +29,7 @@ console.log("DATA:", data);
 
         aiImg.src = "/" + data.image;
         aiImg.style.display = "block";
-        feedback.innerHTML = "";
+        feedback.innerHTML = feedbackTemplateHTML;
 
         setTimeout(() => {
           aiImg.style.display = "none";
@@ -43,7 +48,7 @@ console.log("DATA:", data);
 
         aiImg.src = "/" + data.image;
         aiImg.style.display = "block";
-        feedback.innerHTML = "";
+        feedback.innerHTML = feedbackTemplateHTML;
 
         setTimeout(() => {
           aiImg.style.display = "none";
@@ -113,7 +118,7 @@ console.log("DATA:", data);
     if (data.type === "votes") {
         document.body.classList.remove("feedback-wrong");
         const feedback = document.getElementById("screen_feedback");
-      if (feedback) feedback.innerHTML = "";
+      if (feedback) feedback.innerHTML = feedbackTemplateHTML;
       const img = document.getElementById("ai_img");
       if (img) img.style.display = "none";
     }
@@ -126,7 +131,7 @@ console.log("DATA:", data);
         showScreen("vote");
       /* reset alles van de vorige vraag */
       const feedback = document.getElementById("screen_feedback");
-      if (feedback) feedback.innerHTML = "";
+      if (feedback) feedback.innerHTML = feedbackTemplateHTML;
 
       const aiImg = document.getElementById("ai_img");
       if (aiImg) aiImg.style.display = "none";
