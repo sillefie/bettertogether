@@ -25,6 +25,18 @@ socket.onmessage = (event) => {
         }, 3000);
         return;
       }    
+    if (data.type === "replay_photo") {
+      const img      = document.getElementById("ai_img");
+      const feedback = document.getElementById("screen_feedback");
+      img.src = "/" + data.image;
+      img.style.display = "block";
+      feedback.innerHTML = "";
+      setTimeout(() => {
+        img.style.display   = "none";
+        feedback.textContent = "oh oow � heb je dat gezien?";
+      }, 3000);
+      return;
+    }    
     if (data.type === "feedback") {
       const img      = document.getElementById("ai_img");
       const feedback = document.getElementById("screen_feedback");
@@ -41,21 +53,23 @@ socket.onmessage = (event) => {
         const votes_mathieu = data.votes_mathieu;
         const percent_stefanie = total > 0 ? Math.round((votes_stefanie / total) * 100) : 0;
         const percent_mathieu = total > 0 ? Math.round((votes_mathieu / total) * 100) : 0;
-        const diff = Math.abs(votes_stefanie - votes_mathieu);
-        const same_vote = (votes_stefanie === votes_mathieu);
+        //const diff = Math.abs(votes_stefanie - votes_mathieu);
+        //const same_vote = (votes_stefanie === votes_mathieu);
+        const diff = Math.abs((votes_stefanie / total) * 100 - (votes_mathieu / total) * 100);
+        const same_vote = (Math.round((votes_stefanie / total) * 100) === Math.round((votes_mathieu / total) * 100));
 
         let nuance = "";
 
         if (same_vote) {
             // Publiek stemde gelijk
-            if (diff > 20) {
+            if (diff > 15) {
               nuance = `<p><strong>EN</strong> Amaai, iedereen hier kent jullie door en door.</p>`;
             } else {
               nuance = `<p><strong>EN</strong> Jullie vrienden denken er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ;)</p>`;
             }
           } else {
             // Publiek stemde anders
-            if (diff > 20) {
+            if (diff > 15) {
               nuance = `<p><strong>MAAR</strong> eeeeeuhm, iedereen hier denkt er precies wel anders over 😅</p>`;
             } else {
               nuance = `<p><strong>MAAR</strong> Jullie vrienden denken er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ;)</p>`;
@@ -70,7 +84,6 @@ socket.onmessage = (event) => {
         ${nuance}
         `
         ;
-        console.log("Stefanie:", data.votes_stefanie, "Mathieu:", data.votes_mathieu);
       }
       // 2) Wrong‐flow: start met het pure rode scherm
       else if (data.result === "wrong") {
@@ -84,7 +97,8 @@ socket.onmessage = (event) => {
       }
     }
     if (data.type === "votes") {
-      const feedback = document.getElementById("screen_feedback");
+        document.body.classList.remove("feedback-wrong");
+        const feedback = document.getElementById("screen_feedback");
       if (feedback) feedback.innerHTML = "";
       const img = document.getElementById("ai_img");
       if (img) img.style.display = "none";
@@ -93,6 +107,7 @@ socket.onmessage = (event) => {
       showScreen(data.screen);
     }
     if (data.type === "question") {
+        document.body.classList.remove("feedback-wrong");
         document.getElementById("question_text").textContent = data.text;
         showScreen("vote");
       /* reset alles van de vorige vraag */
@@ -108,6 +123,7 @@ socket.onmessage = (event) => {
       lastVotesMathieu = 0;
     }    
     if (data.type === "scoreboard") {
+        document.body.classList.remove("feedback-wrong");
         const list = document.getElementById("ranking");
         list.innerHTML = "";
         data.ranking.forEach(([name, score]) => {
