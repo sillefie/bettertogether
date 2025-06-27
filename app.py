@@ -164,7 +164,10 @@ async def websocket_admin(ws: WebSocket):
                 state["used_ai"].append(chosen)
                 save_state(state)
                 state["last_ai"] = chosen
-                await broadcast(public_clients.values(), {"type": "feedback", "result": "wrong", "image": chosen})
+                await broadcast(public_clients.values(), {
+                    "type": "show_photo",
+                    "image": chosen
+                })
             elif cmd == "show_photo":
                 # stuur een show_photo-event naar alle schermen
                 await broadcast(public_clients.values(), {
