@@ -13,6 +13,7 @@ window.addEventListener("load", () => {
 });
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
+console.log("DATA:", data);
     if (data.type === "show_photo" || data.type === "replay_photo") {
       showScreen("feedback");
 
