@@ -26,9 +26,9 @@ socket.onmessage = (event) => {
         const aiImg = document.getElementById("ai_img");
         const feedback = document.getElementById("screen_feedback");
         if (!aiImg || !feedback) return;
+        feedback.innerHTML = feedbackTemplateHTML;
         aiImg.src = "/" + data.image;
         aiImg.style.display = "block";
-        feedback.innerHTML = feedbackTemplateHTML;
 
         setTimeout(() => {
           aiImg.style.display = "none";
@@ -36,17 +36,6 @@ socket.onmessage = (event) => {
         }, 300000);
       }, 100);
       return;
-    }
-    if (data.type === "feedback" && data.result === "wrong" && data.image) {
-      showScreen("feedback");
-      setTimeout(() => {
-        const aiImg = document.getElementById("ai_img");
-        const feedback = document.getElementById("screen_feedback");
-        if (!aiImg || !feedback) return;
-        aiImg.src = "/" + data.image;
-        aiImg.style.display = "block";
-        feedback.innerHTML = feedbackTemplateHTML;
-      }, 100);
     }
     if (data.type === "feedback") {
       const img      = document.getElementById("ai_img");
