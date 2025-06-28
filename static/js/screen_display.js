@@ -41,7 +41,7 @@ socket.onmessage = (event) => {
 
           // Toon eindtekst na 5 foto's
           if (window.shownPhotos >= 5) {
-            feedback.innerHTML = `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord …<br><br>maar … chanceke, we hebben niks anders meer uitgestoken ??.</h1>`;
+            feedback.innerHTML = `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord …<br><br>maar … chanceke, we hebben niks anders meer uitgestoken U+1F923 U+1F605.</h1>`;
           } else {
             const h1 = document.getElementById("feedback");
             h1.textContent = "oh oow … heb je dat gezien?";
@@ -90,7 +90,7 @@ socket.onmessage = (event) => {
         feedback.innerHTML = feedbackTemplateHTML;
 
         const h1 = document.getElementById("feedback");
-        if (h1) h1.innerHTML = `Wauw! Jullie denken er net hetzelfde over ?:<br>${winner}`;
+        if (h1) h1.innerHTML = `Wauw! Stefanie & Mathieu denken er net hetzelfde over U+1F970 :<br>${winner}`;
 
         // stemmenbalken en nuance
         const answerSTEM = document.getElementById("answerSTEM");
@@ -105,8 +105,8 @@ socket.onmessage = (event) => {
               </div>
             </div>`;
         }
-        const answerCrowd = document.getElementById("answerCrowd");
-        if (answerCrowd) answerCrowd.innerHTML = nuance;
+        //const answerCrowd = document.getElementById("answerCrowd");
+        //if (answerCrowd) answerCrowd.innerHTML = nuance;
 
       }
       // 2) Wrongâ€flow: start met het pure rode scherm
@@ -139,8 +139,8 @@ socket.onmessage = (event) => {
               </div>
             </div>`;
         }
-        const answerCrowd = document.getElementById("answerCrowd");
-        if (answerCrowd) answerCrowd.innerHTML = nuance;        
+        //const answerCrowd = document.getElementById("answerCrowd");
+        //if (answerCrowd) answerCrowd.innerHTML = nuance;        
       } 
       // 3) Fallback (zou niet mogen gebeuren)
       else {
@@ -173,17 +173,6 @@ socket.onmessage = (event) => {
       lastVotesStefanie = 0;
       lastVotesMathieu = 0;
     }    
-    if (data.type === "scoreboard") {
-        document.body.classList.remove("feedback-wrong");
-        const list = document.getElementById("ranking");
-        list.innerHTML = "";
-        data.ranking.forEach(([name, score]) => {
-            const li = document.createElement("li");
-            li.textContent = `${name}: ${score}`;
-            list.appendChild(li);
-        });
-        showScreen("scoreboard");
-    }
 };
 
 function showScreen(name) {
