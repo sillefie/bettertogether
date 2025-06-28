@@ -1,4 +1,4 @@
-let ws = new WebSocket("wss://" + location.host + "/ws/public");
+   let ws = new WebSocket("wss://" + location.host + "/ws/public");
 
 let currentScreen = "intro";
 function register() {

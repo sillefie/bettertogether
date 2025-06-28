@@ -111,9 +111,6 @@ input.form-control{
   background-color: #c00;    /* of een precies rood dat bij het thema past */
   color: white;
 }
-.feedback-wrong h1 {
-  color: white !important;
-}
 
 .bar-container {
   display: flex;
