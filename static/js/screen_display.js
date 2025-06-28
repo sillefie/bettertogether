@@ -73,7 +73,7 @@ socket.onmessage = (event) => {
         feedback.innerHTML = feedbackTemplateHTML;
 
         const h1 = document.getElementById("feedback");
-        if (h1) h1.innerHTML = `Wauw!<br>Stefanie & Mathieu denken er net hetzelfde over U+1F970<br>=> ${winner}`;
+        if (h1) h1.innerHTML = `Wauw! Stefanie & Mathieu denken er net hetzelfde over!<br>=> 't is '${winner}`;
 
         // stemmenbalken en nuance
         const answerSTEM = document.getElementById("answerSTEM");
@@ -81,11 +81,11 @@ socket.onmessage = (event) => {
           answerSTEM.innerHTML = `
             De rest denkt er zo over: 
             <div class="bar-container">
-              Stefanie: <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
-                ${percent_stefanie}%
+              <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
+                Stefanie: ${percent_stefanie}%
               </div>
-              Mathieu: <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
-                ${percent_mathieu}%
+              <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
+                Mathieu: ${percent_mathieu}%
               </div>
             </div>`;
         }
@@ -116,11 +116,11 @@ socket.onmessage = (event) => {
           answerSTEM.innerHTML = `
             De rest denkt er zo over: 
             <div class="bar-container">
-              Stefanie: <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
-                ${percent_stefanie}%
+              <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
+                Stefanie: ${percent_stefanie}%
               </div>
-              Mathieu: <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
-                ${percent_mathieu}%
+              <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
+                Mathieu: ${percent_mathieu}%
               </div>
             </div>`;
         }
@@ -142,7 +142,7 @@ socket.onmessage = (event) => {
 
         feedback.innerHTML = feedbackTemplateHTML;
         const h1 = document.getElementById("feedback");
-        h1.textContent = `Oh nee ... Stefanie & Mathieu hebben niet hetzelfde geantwoord ...<br><br>maar ... chanceke, we hebben niks anders meer uitgestoken.`; /* … */
+        h1.textContent = `Oh nee ... Stefanie & Mathieu hebben niet hetzelfde geantwoord ... \n \n maar ... chanceke, we hebben niks anders meer uitgestoken.`; /* … */
 
         // stemmenbalken en nuance
         const answerSTEM = document.getElementById("answerSTEM");
@@ -150,11 +150,11 @@ socket.onmessage = (event) => {
           answerSTEM.innerHTML = `
             De rest denkt er zo over: 
             <div class="bar-container">
-              Stefanie: <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
-                ${percent_stefanie}%
+              <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
+                Stefanie: ${percent_stefanie}%
               </div>
-              Mathieu: <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
-                ${percent_mathieu}%
+              <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
+                Mathieu: ${percent_mathieu}%
               </div>
             </div>`;
         }

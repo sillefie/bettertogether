@@ -33,13 +33,13 @@ src: url('https://www.wearebettertogether.be/wp-content/uploads/typolab-fonts/Te
     transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
     transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95), -webkit-transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
-header {padding-bottom: 20px !important;padding-top: 20px !important; width:60%;}
+header {padding-bottom: 20px !important;padding-top: 20px !important;}
 
 /* Bootstrap overrides */
 body {width: 100%; min-height: 100vh;max-height: 100vh;}
-#main-wrapper {display: flex; flex-direction: column; align-items: center; justify-content: center; top: 100px;}
+#main-wrapper {display: flex; flex-direction: column; align-items: center; justify-content: center; top: 10px;}
 header, #container {text-align: center;}
-h1 {font-family: 'Bergamo'; color: var(--bt-yellow);font-size:3.5em; margin: 20px 0px 40px;}
+h1 {font-family: 'Bergamo'; color: var(--bt-yellow);font-size:3.5em; margin: 20px auto 40px;width:60%;}
 p {font-size:2em;}
 .btn-primary{
   background:var(--bt-yellow);
@@ -116,7 +116,7 @@ input.form-control{
   display: flex;
   flex-direction: column;
   gap: 1em;
-  margin: 2em auto;
+  margin: 1em auto;
   padding: 0 1em;
   max-width: 600px;
 }
@@ -135,10 +135,10 @@ input, button {    margin-top: 15px;}
 
 #ai_img {
     position: absolute;
-    top: -110px;
+    top: -10px;
     left: 0;
     width: 100vw !important;
-    height: calc(100vh + 110px) !important;
+    height: calc(100vh + 10px) !important;
     object-fit: cover;
     z-index: 9999;}
 
