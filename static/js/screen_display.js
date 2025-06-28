@@ -33,7 +33,7 @@ socket.onmessage = (event) => {
         setTimeout(() => {
           aiImg.style.display = "none";
           feedback.textContent = "oh oow … heb je dat gezien?";
-        }, 3000);
+        }, 300000);
       }, 100);
       return;
     }
