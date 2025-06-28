@@ -108,7 +108,7 @@ async def websocket_admin(ws: WebSocket):
                     votes_mathieu = sum(1 for v in votes.values() if v == "Mathieu")
                     total_votes = len(votes)
 
-                    await broadcast(display_clients, {
+                    await broadcast(public_clients, {
                         "type": "feedback",
                         "result": "same",
                         "winning_name": data.get("winning_name", "??"),
@@ -186,7 +186,6 @@ async def websocket_admin(ws: WebSocket):
                 await broadcast(public_clients.values(),{
                     "type": "feedback",
                     "result": "wrong_ai",
-                    "image": chosen,
                     "votes_stefanie": votes_stefanie,
                     "votes_mathieu": votes_mathieu,
                     "votes_total": total_votes,
