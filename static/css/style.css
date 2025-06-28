@@ -134,3 +134,4 @@ input.form-control{
 .vote-bar.mathieu {
   background-color: #3c8fc3; /* Blauw */
 }
+input, button {    margin-top: 15px;}

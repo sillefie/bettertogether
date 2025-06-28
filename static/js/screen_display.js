@@ -27,8 +27,11 @@ socket.onmessage = (event) => {
         const aiImg = document.getElementById("ai_img");
         if (!aiImg || !feedback) return;
         feedback.innerHTML = feedbackTemplateHTML;
-        aiImg.src = "/" + data.image;
-        aiImg.style.display = "block";
+        const refreshedImg = document.getElementById("ai_img");
+        if (refreshedImg) {
+          refreshedImg.src = "/" + data.image;
+          refreshedImg.style.display = "block";
+        }
 
         setTimeout(() => {
           aiImg.style.display = "none";
