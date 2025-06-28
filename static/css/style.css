@@ -135,3 +135,13 @@ input.form-control{
   background-color: #3c8fc3; /* Blauw */
 }
 input, button {    margin-top: 15px;}
+
+#ai_img {
+  position: absolute;
+    top: -110px;
+    left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 9999;
+}
