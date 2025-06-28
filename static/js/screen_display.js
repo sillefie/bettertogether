@@ -20,7 +20,7 @@ window.addEventListener("load", () => {
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log("DATA:", data);
-    if (data.type === "show_photo" || data.type === "replay_photo") {
+    if (data.type === "show_photo") {
       showScreen("feedback");
       setTimeout(() => {
         const feedback = document.getElementById("screen_feedback");
@@ -35,20 +35,18 @@ socket.onmessage = (event) => {
 
         setTimeout(() => {
           aiImg.style.display = "none";
-
-          // Tel aantal getoonde foto's op
-          window.shownPhotos = (window.shownPhotos || 0) + 1;
-
-          // Toon eindtekst na 5 foto's
-          if (window.shownPhotos >= 5) {
-            feedback.innerHTML = `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord …<br><br>maar … chanceke, we hebben niks anders meer uitgestoken U+1F923 U+1F605.</h1>`;
-          } else {
-            const h1 = document.getElementById("feedback");
-            h1.textContent = "oh oow … heb je dat gezien?";
-          }
+          const h1 = document.getElementById("feedback");
+          h1.textContent = "oh oow … heb je dat gezien?";
         }, 2000);
       }, 100);
       return;
+    }
+    if (data.type === "hide_photo") {
+        showScreen("feedback");
+        const aiImg = document.getElementById("ai_img");
+        aiImg.style.display = "none";
+        const h1 = document.getElementById("feedback");
+        h1.textContent = "oh oow … heb je dat gezien?";
     }
     if (data.type === "feedback") {
       const img      = document.getElementById("ai_img");
@@ -75,7 +73,7 @@ socket.onmessage = (event) => {
         feedback.innerHTML = feedbackTemplateHTML;
 
         const h1 = document.getElementById("feedback");
-        if (h1) h1.innerHTML = `Wauw! Stefanie & Mathieu denken er net hetzelfde over U+1F970 :<br>${winner}`;
+        if (h1) h1.innerHTML = `Wauw!<br>Stefanie & Mathieu denken er net hetzelfde over U+1F970<br>=> ${winner}`;
 
         // stemmenbalken en nuance
         const answerSTEM = document.getElementById("answerSTEM");
@@ -126,6 +124,37 @@ socket.onmessage = (event) => {
         }
         //const answerCrowd = document.getElementById("answerCrowd");
         //if (answerCrowd) answerCrowd.innerHTML = nuance;        
+      } 
+      // 2) Wrongâ€flow: start met het pure rode scherm - NO AI
+      else if (data.result === "wrong_ai") {
+        document.body.classList.add("feedback-wrong");
+        if (img) img.style.display = "none";
+
+        const total = data.votes_total;
+        const votes_stefanie = data.votes_stefanie;
+        const votes_mathieu = data.votes_mathieu;
+        const percent_stefanie = total > 0 ? Math.round((votes_stefanie / total) * 100) : 0;
+        const percent_mathieu = total > 0 ? Math.round((votes_mathieu / total) * 100) : 0;
+        const diff = Math.abs((votes_stefanie / total) * 100 - (votes_mathieu / total) * 100);
+        const same_vote = (Math.round((votes_stefanie / total) * 100) === Math.round((votes_mathieu / total) * 100));
+
+        feedback.innerHTML = feedbackTemplateHTML;
+        const h1 = document.getElementById("feedback");
+        h1.textContent = `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord …<br><br>maar … chanceke, we hebben niks anders meer uitgestoken U+1F923 U+1F605.</h1>`;
+
+        // stemmenbalken en nuance
+        const answerSTEM = document.getElementById("answerSTEM");
+        if (answerSTEM) {
+          answerSTEM.innerHTML = `
+            <div class="bar-container">
+              <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
+                Stefanie: ${percent_stefanie}%
+              </div>
+              <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
+                Mathieu: ${percent_mathieu}%
+              </div>
+            </div>`;
+        }
       } 
       // 3) Fallback (zou niet mogen gebeuren)
       else {

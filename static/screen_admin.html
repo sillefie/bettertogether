@@ -31,8 +31,9 @@
         <button onclick="confirmSameStefanie(); setScreen('feedback')">Zelfde antwoord = Stefanie</button>
         <button onclick="confirmSameMathieu(); setScreen('feedback')">Zelfde antwoord = Mathieu</button>
         <button onclick="confirmDifferent(); setScreen('feedback')">Verschillend antwoord</button>
+        <button onclick="confirmDifferentNoAi(); setScreen('feedback')">Verschillend antwoord - geen AI meer</button>
         <button onclick="showPhoto()">Toon AI-foto</button>
-        <button onclick="repeatPhoto()">Herhaal AI-foto</button>
+        <button onclick="hidePhoto()">Verberg AI-foto</button>
     </section>
 
     <section>
@@ -81,14 +82,17 @@
     function confirmDifferent() {
         socket.send(JSON.stringify({ command: "different_answer" }));
     }
+    function confirmDifferentNoAi() {
+        socket.send(JSON.stringify({ command: "different_answer_noai" }));
+    }
     function endQuiz() {
         socket.send(JSON.stringify({ command: "end_quiz" }));
     }
     function showPhoto() {
       socket.send(JSON.stringify({ command: "show_photo" }));
     }
-    function repeatPhoto() {
-      socket.send(JSON.stringify({ command: "repeat_photo" }));
+    function hidePhoto() {
+      socket.send(JSON.stringify({ command: "hide_photo" }));
     }
     window.onload = () => {
       const select = document.getElementById("questionSelect");
