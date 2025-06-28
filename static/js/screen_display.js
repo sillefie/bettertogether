@@ -79,12 +79,13 @@ socket.onmessage = (event) => {
         const answerSTEM = document.getElementById("answerSTEM");
         if (answerSTEM) {
           answerSTEM.innerHTML = `
+            De rest denkt er zo over: 
             <div class="bar-container">
-              <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
-                Stefanie: ${percent_stefanie}%
+              Stefanie: <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
+                ${percent_stefanie}%
               </div>
-              <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
-                Mathieu: ${percent_mathieu}%
+              Mathieu: <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
+                ${percent_mathieu}%
               </div>
             </div>`;
         }
@@ -113,12 +114,13 @@ socket.onmessage = (event) => {
         const answerSTEM = document.getElementById("answerSTEM");
         if (answerSTEM) {
           answerSTEM.innerHTML = `
+            De rest denkt er zo over: 
             <div class="bar-container">
-              <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
-                Stefanie: ${percent_stefanie}%
+              Stefanie: <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
+                ${percent_stefanie}%
               </div>
-              <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
-                Mathieu: ${percent_mathieu}%
+              Mathieu: <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
+                ${percent_mathieu}%
               </div>
             </div>`;
         }
@@ -146,12 +148,13 @@ socket.onmessage = (event) => {
         const answerSTEM = document.getElementById("answerSTEM");
         if (answerSTEM) {
           answerSTEM.innerHTML = `
+            De rest denkt er zo over: 
             <div class="bar-container">
-              <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
-                Stefanie: ${percent_stefanie}%
+              Stefanie: <div class="vote-bar stefanie" style="width:${percent_stefanie}%">
+                ${percent_stefanie}%
               </div>
-              <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
-                Mathieu: ${percent_mathieu}%
+              Mathieu: <div class="vote-bar mathieu" style="width:${percent_mathieu}%">
+                ${percent_mathieu}%
               </div>
             </div>`;
         }

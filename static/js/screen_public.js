@@ -55,7 +55,7 @@ ws.onmessage = (event) => {
     const coupleVote = msg.winning_name;
 
     const feedbackText = document.getElementById("feedbackText");
-    feedbackText.innerText = "Bedankt om te stemmen!<br>Wacht op het resultaat …";
+    feedbackText.innerText = "Bedankt om te stemmen! Nu is't wachten op het resultaat ...";
   } else if (msg.type === "scoreboard") {
       document.getElementById("start").style.display = "none";
     document.getElementById("feedback").style.display = "none";
