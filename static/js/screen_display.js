@@ -46,6 +46,7 @@ socket.onmessage = (event) => {
         aiImg.src = "/" + data.image;
         aiImg.style.display = "block";
         feedback.innerHTML = feedbackTemplateHTML;
+      }, 100);
     }
     if (data.type === "feedback") {
       const img      = document.getElementById("ai_img");
