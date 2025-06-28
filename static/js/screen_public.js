@@ -1,6 +1,6 @@
    let ws = new WebSocket("wss://" + location.host + "/ws/public");
 
-let currentScreen = "intro";
+let currentScreen = "start";
 function register() {
   const name = document.getElementById("nameInput").value.trim();
 
@@ -14,14 +14,14 @@ function register() {
   ws.send(JSON.stringify({ type: "register", name: name }));
   document.getElementById("NaamInvullen").style.display = "none";
   document.getElementById("StartinginaSecond").style.display = "";
-  currentScreen = "intro";
+  currentScreen = "start";
 }
 
 
 
 function vote(v) {
   ws.send(JSON.stringify({ type: "vote", vote: v }));v
-  document.getElementById("intro").style.display = "none";
+  document.getElementById("start").style.display = "none";
   document.getElementById("question").style.display = "none";
   document.getElementById("waiting").style.display = "";
 }
@@ -31,7 +31,7 @@ ws.onmessage = (event) => {
   if (msg.type === "screen") {
     if (msg.screen === "question") {
       document.getElementById("question").style.display = "";
-      document.getElementById("intro").style.display = "none";
+      document.getElementById("start").style.display = "none";
       document.getElementById("waiting").style.display = "none";
       document.getElementById("feedback").style.display = "none";
       document.getElementById("scoreboard").style.display = "none";
@@ -44,7 +44,7 @@ ws.onmessage = (event) => {
     document.getElementById("waiting").style.display = "none";
     document.getElementById("feedback").style.display = "none";
     document.getElementById("scoreboard").style.display = "none";
-      document.getElementById("intro").style.display = "none";
+      document.getElementById("start").style.display = "none";
  } else if (msg.type === "feedback") {
     document.getElementById("question").style.display = "none";
     document.getElementById("waiting").style.display = "none";
@@ -55,9 +55,9 @@ ws.onmessage = (event) => {
     const coupleVote = msg.winning_name;
 
     const feedbackText = document.getElementById("feedbackText");
-    feedbackText.innerText = "<h2>Bedankt om te stemmen!</h2><p>Wacht op het resultaat …</p>";
+    feedbackText.innerText = "Bedankt om te stemmen!<br>Wacht op het resultaat …";
   } else if (msg.type === "scoreboard") {
-      document.getElementById("intro").style.display = "none";
+      document.getElementById("start").style.display = "none";
     document.getElementById("feedback").style.display = "none";
     document.getElementById("waiting").style.display = "none";
     document.getElementById("scoreboard").style.display = "";

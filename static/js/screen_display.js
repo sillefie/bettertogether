@@ -36,7 +36,7 @@ socket.onmessage = (event) => {
         setTimeout(() => {
           aiImg.style.display = "none";
           const h1 = document.getElementById("feedback");
-          h1.textContent = "oh oow … heb je dat gezien?";
+          h1.textContent = "oh oow ... heb je dat gezien?";
         }, 2000);
       }, 100);
       return;
@@ -46,7 +46,7 @@ socket.onmessage = (event) => {
         const aiImg = document.getElementById("ai_img");
         aiImg.style.display = "none";
         const h1 = document.getElementById("feedback");
-        h1.textContent = "oh oow … heb je dat gezien?";
+        h1.textContent = "oh oow ... heb je dat gezien?";
     }
     if (data.type === "feedback") {
       const img      = document.getElementById("ai_img");
@@ -107,7 +107,7 @@ socket.onmessage = (event) => {
 
         feedback.innerHTML = feedbackTemplateHTML;
         const h1 = document.getElementById("feedback");
-        h1.textContent = "Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dat kunnen we niet zo laten …";
+        h1.textContent = "Oh nee ... Stefanie & Mathieu hebben niet hetzelfde geantwoord ... dat kunnen we niet zo laten ...";
 
         // stemmenbalken en nuance
         const answerSTEM = document.getElementById("answerSTEM");
@@ -140,7 +140,7 @@ socket.onmessage = (event) => {
 
         feedback.innerHTML = feedbackTemplateHTML;
         const h1 = document.getElementById("feedback");
-        h1.textContent = `<h1>Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord …<br><br>maar … chanceke, we hebben niks anders meer uitgestoken U+1F923 U+1F605.</h1>`;
+        h1.textContent = `Oh nee ... Stefanie & Mathieu hebben niet hetzelfde geantwoord ...<br><br>maar ... chanceke, we hebben niks anders meer uitgestoken.`; /* … */
 
         // stemmenbalken en nuance
         const answerSTEM = document.getElementById("answerSTEM");

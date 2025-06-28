@@ -164,9 +164,34 @@ async def websocket_admin(ws: WebSocket):
                 state["used_ai"].append(chosen)
                 save_state(state)
                 state["last_ai"] = chosen
-                await broadcast(public_clients.values(), {"type": "feedback", "result": "wrong", "image": chosen})
+                
+                votes = state["votes"]
+                votes_stefanie = sum(1 for v in votes.values() if v == "Stefanie")
+                votes_mathieu = sum(1 for v in votes.values() if v == "Mathieu")
+                total_votes = len(votes)
+                await broadcast(public_clients.values(),{
+                    "type": "feedback",
+                    "result": "wrong",
+                    "image": chosen,
+                    "winning_name": winning_name,
+                    "votes_stefanie": votes_stefanie,
+                    "votes_mathieu": votes_mathieu,
+                    "votes": votes,
+                })                
             elif cmd == "different_answer_noai":
-                await broadcast(public_clients.values(), {"type": "feedback", "result": "wrong_ai"})
+                votes = state["votes"]
+                votes_stefanie = sum(1 for v in votes.values() if v == "Stefanie")
+                votes_mathieu = sum(1 for v in votes.values() if v == "Mathieu")
+                total_votes = len(votes)
+                await broadcast(public_clients.values(),{
+                    "type": "feedback",
+                    "result": "wrong_ai",
+                    "image": chosen,
+                    "winning_name": winning_name,
+                    "votes_stefanie": votes_stefanie,
+                    "votes_mathieu": votes_mathieu,
+                    "votes": votes,
+                })                
             elif cmd == "show_photo":
                 # stuur een show_photo-event naar alle schermen
                 await broadcast(public_clients.values(), {
