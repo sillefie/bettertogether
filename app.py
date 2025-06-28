@@ -214,3 +214,14 @@ async def websocket_admin(ws: WebSocket):
                 await broadcast(public_clients.values(), {"type": "scoreboard", "ranking": top10})
     except WebSocketDisconnect:
         admin_clients.remove(ws)
+from fastapi.responses import Response
+
+@app.get("/admin/votes/download")
+async def download_votes():
+    lines = ["naam,stem"]
+    for name, vote in state["votes"].items():
+        lines.append(f"{name},{vote}")
+    csv_content = "\n".join(lines)
+    return Response(content=csv_content, media_type="text/csv", headers={
+        "Content-Disposition": "attachment; filename=stemmen.csv"
+    })
