@@ -23,8 +23,8 @@ socket.onmessage = (event) => {
     if (data.type === "show_photo" || data.type === "replay_photo") {
       showScreen("feedback");
       setTimeout(() => {
-        const aiImg = document.getElementById("ai_img");
         const feedback = document.getElementById("screen_feedback");
+        const aiImg = document.getElementById("ai_img");
         if (!aiImg || !feedback) return;
         feedback.innerHTML = feedbackTemplateHTML;
         aiImg.src = "/" + data.image;
