@@ -144,3 +144,5 @@ input, button {    margin-top: 15px;}
     height: calc(100vh + 110px) !important;
     object-fit: cover;
     z-index: 9999;}
+
+.publiek .wrapper {padding:20px;}
