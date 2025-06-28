@@ -32,6 +32,10 @@ async def get_admin():
 async def get_display():
     return FileResponse("static/screen_display.html")
 
+@app.route('/admin/votes/download')
+def download_votes():
+    return send_file('data/votes.json', as_attachment=True)
+
 questions = [
     "Wie heeft de gekste familie?",
     "Wie zou er het best voor een zwijn kunnen zorgen?",
@@ -83,7 +87,8 @@ async def websocket_public(ws: WebSocket):
                 if name not in state["votes"]:
                     state["votes"][name] = vote
                     save_state(state)
-                    await broadcast(admin_clients, {"type": "votes", "votes": state["votes"]})
+                    await broadcast(admin_clients, {"type": "votes", "votes": state["votes"],"votes_stefanie": vote_counter.get("Stefanie", 0),
+    "votes_mathieu": vote_counter.get("Mathieu", 0)})
     except WebSocketDisconnect:
         public_clients.pop(uid, None)
         state["players"].pop(uid, None)
@@ -127,7 +132,8 @@ async def websocket_admin(ws: WebSocket):
                         "idx": idx,
                         "text": questions[idx]
                     })
-                    await broadcast(admin_clients, {"type": "votes", "votes": state["votes"]})
+                    await broadcast(admin_clients, {"type": "votes", "votes": state["votes"],"votes_stefanie": vote_counter.get("Stefanie", 0),
+    "votes_mathieu": vote_counter.get("Mathieu", 0)})
             elif cmd == "same_answer":
                 await broadcast(public_clients.values(), {"type": "feedback", "result": "correct"})
             elif cmd in ["same_answer_stefanie", "same_answer_mathieu"]:

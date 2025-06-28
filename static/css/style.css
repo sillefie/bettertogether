@@ -137,11 +137,10 @@ input.form-control{
 input, button {    margin-top: 15px;}
 
 #ai_img {
-  position: absolute;
+    position: absolute;
     top: -110px;
     left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: 9999;
-}
+    width: 100vw !important;
+    height: calc(100vh + 110px) !important;
+    object-fit: cover;
+    z-index: 9999;}

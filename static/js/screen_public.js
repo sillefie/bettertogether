@@ -56,13 +56,14 @@ ws.onmessage = (event) => {
 
     const feedbackText = document.getElementById("feedbackText");
 
-    if (playerVote === coupleVote) {
-      feedbackText.innerText = "Yes! Je voelt dit koppel perfect aan. ?";
-      aiImage.style.display = "none";
+    if (msg.result === "wrong") {
+        feedbackText.innerText = "Oh nee … Stefanie & Mathieu hebben niet hetzelfde geantwoord … dan gebeuren er rare dingen, kijk maar mee op het grote scherm 🙈";
     } else {
-      feedbackText.innerText = "Oeps, Stefanie en Mathieu denken er precies anders over. ?";
-      aiImage.src = "/" + msg.image;
-      aiImage.style.display = "block";
+        if (playerVote === coupleVote) {
+          feedbackText.innerText = "Yes! Je voelt dit koppel perfect aan. ?";
+        } else {
+          feedbackText.innerText = "Oeps, Stefanie en Mathieu denken er precies anders over. ?";
+        }
     }
 
   } else if (msg.type === "scoreboard") {

@@ -17,7 +17,7 @@
       <button onclick="setScreen('qr')">QR-code tonen</button>
       <button onclick="setScreen('vote')">Vragen</button>
       <button onclick="setScreen('feedback')">Feedback</button>
-      <button onclick="setScreen('scoreboard')">Top 10</button>
+      <button id="downloadVotesBtn" href="/admin/votes/download">Download stemmen</button>
     </section>
 
     <section>
@@ -36,12 +36,10 @@
     </section>
 
     <section>
-      <h2>Quiz afronden</h2>
-      <button onclick="endQuiz()">Toon top 10</button>
-    </section>
-
-    <section>
       <h2>Huidige stemmen</h2>
+    <div id="liveVoteCount" style="font-size: 1.5em; margin-bottom: 1em;">
+      Stefanie: 0 – Mathieu: 0
+    </div>
       <ul id="votes_list"></ul>
     </section>
   </div>
@@ -61,6 +59,10 @@
           li.textContent = `${name}: ${answer}`;
           list.appendChild(li);
         });
+        const countDiv = document.getElementById("liveVoteCount");
+        if (countDiv && data.votes_stefanie !== undefined && data.votes_mathieu !== undefined) {
+            countDiv.textContent = `Stefanie: ${data.votes_stefanie} – Mathieu: ${data.votes_mathieu}`;
+        }
       }
     };
     function setScreen(screenName) {
