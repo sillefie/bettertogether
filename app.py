@@ -176,6 +176,7 @@ async def websocket_admin(ws: WebSocket):
                     "winning_name": winning_name,
                     "votes_stefanie": votes_stefanie,
                     "votes_mathieu": votes_mathieu,
+                    "votes_total": total_votes,
                     "votes": votes,
                 })                
             elif cmd == "different_answer_noai":
@@ -190,6 +191,7 @@ async def websocket_admin(ws: WebSocket):
                     "winning_name": winning_name,
                     "votes_stefanie": votes_stefanie,
                     "votes_mathieu": votes_mathieu,
+                    "votes_total": total_votes,
                     "votes": votes,
                 })                
             elif cmd == "show_photo":

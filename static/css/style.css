@@ -39,7 +39,7 @@ header {padding-bottom: 20px !important;padding-top: 20px !important;}
 body {width: 100%; min-height: 100vh;max-height: 100vh;}
 #main-wrapper {display: flex; flex-direction: column; align-items: center; justify-content: center; top: 10px;}
 header, #container {text-align: center;}
-h1 {font-family: 'Bergamo'; color: var(--bt-yellow);font-size:3.5em; margin: 20px auto 40px;width:60%;}
+h1 {font-family: 'Bergamo'; color: var(--bt-yellow);font-size:3.5em; margin: 20px auto 40px;width:75%;}
 p {font-size:2em;}
 .btn-primary{
   background:var(--bt-yellow);
