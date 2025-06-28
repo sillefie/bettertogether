@@ -72,21 +72,6 @@ socket.onmessage = (event) => {
         const same_vote = (Math.round((votes_stefanie / total) * 100) === Math.round((votes_mathieu / total) * 100));
 
         let nuance = "";
-        /* if (same_vote) {
-            // Publiek stemde gelijk
-            if (diff > 15) {
-              nuance = `<p><strong>EN</strong> Amaai, iedereen hier kent jullie door en door.</p>`;
-            } else {
-              nuance = `<p><strong>EN</strong> Jullie vrienden denken er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ;)</p>`;
-            }
-          } else {
-            // Publiek stemde anders
-            if (diff > 15) {
-              nuance = `<p><strong>MAAR</strong> eeeeeuhm, iedereen hier denkt er precies wel anders over 😅</p>`;
-            } else {
-              nuance = `<p><strong>MAAR</strong> Jullie vrienden denken er min of meer zelfde over dan jullie, maar toch niet helemaal eeeh ;)</p>`;
-            }
-        }*/
         feedback.innerHTML = feedbackTemplateHTML;
 
         const h1 = document.getElementById("feedback");
